@@ -1,0 +1,17 @@
+mode: set
+github.com/adlio/harvest/arguments.go:14.27,16.2 1 1
+github.com/adlio/harvest/arguments.go:18.48,20.31 2 1
+github.com/adlio/harvest/arguments.go:23.2,23.10 1 1
+github.com/adlio/harvest/arguments.go:20.31,22.3 1 0
+github.com/adlio/harvest/project.go:38.89,43.2 4 1
+github.com/adlio/harvest/project.go:45.76,49.2 3 0
+github.com/adlio/harvest/api.go:22.61,30.2 7 1
+github.com/adlio/harvest/api.go:32.74,37.16 4 1
+github.com/adlio/harvest/api.go:41.2,42.16 2 1
+github.com/adlio/harvest/api.go:45.2,46.28 2 1
+github.com/adlio/harvest/api.go:51.2,53.16 3 1
+github.com/adlio/harvest/api.go:58.2,58.12 1 1
+github.com/adlio/harvest/api.go:37.16,39.3 1 0
+github.com/adlio/harvest/api.go:42.16,44.3 1 0
+github.com/adlio/harvest/api.go:46.28,49.3 2 0
+github.com/adlio/harvest/api.go:53.16,56.3 2 0

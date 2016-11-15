@@ -1,0 +1,624 @@
+{
+  "for_day": "2016-11-15",
+  "day_entries": [
+    {
+      "id": 538242480,
+      "user_id": 1420761,
+      "spent_at": "2016-11-15",
+      "created_at": "2016-11-15T17:33:57Z",
+      "updated_at": "2016-11-15T17:33:57Z",
+      "project_id": "12154171",
+      "task_id": "4836342",
+      "project": "5390 - Nov 2016 Monthly Site Management",
+      "task": "Development",
+      "client": "KUH 5390, LLC",
+      "notes": "hey",
+      "hours_without_timer": 8,
+      "hours": 8
+    },
+    {
+      "id": 538242657,
+      "user_id": 1420761,
+      "spent_at": "2016-11-15",
+      "created_at": "2016-11-15T17:34:14Z",
+      "updated_at": "2016-11-15T17:34:14Z",
+      "project_id": "12150521",
+      "task_id": "4836342",
+      "project": "Server Support Term Starting Nov 2016 (SOW #4229) PO: 167516",
+      "task": "Development",
+      "client": "Churchill Downs Incorporated",
+      "notes": "hi",
+      "hours_without_timer": 8,
+      "hours": 8
+    }
+  ],
+  "projects": [
+    {
+      "id": 12150521,
+      "name": "Server Support Term Starting Nov 2016 (SOW #4229) PO: 167516",
+      "billable": true,
+      "code": "",
+      "tasks": [
+        {
+          "id": 733902,
+          "name": "Administration",
+          "billable": true
+        },
+        {
+          "id": 4878346,
+          "name": "Design",
+          "billable": true
+        },
+        {
+          "id": 4836342,
+          "name": "Development",
+          "billable": true
+        },
+        {
+          "id": 4878357,
+          "name": "Information Architecture",
+          "billable": true
+        },
+        {
+          "id": 733903,
+          "name": "Project Management",
+          "billable": true
+        },
+        {
+          "id": 4878358,
+          "name": "QA",
+          "billable": true
+        },
+        {
+          "id": 5019706,
+          "name": "Strategy",
+          "billable": true
+        }
+      ],
+      "client": "Churchill Downs Incorporated",
+      "client_id": 3781800,
+      "client_currency": "United States Dollar - USD",
+      "client_currency_symbol": "$"
+    },
+    {
+      "id": 12154138,
+      "name": "CDRT - Nov 2016 Monthly Site Management",
+      "billable": true,
+      "code": "",
+      "tasks": [
+        {
+          "id": 733902,
+          "name": "Administration",
+          "billable": true
+        },
+        {
+          "id": 4878346,
+          "name": "Design",
+          "billable": true
+        },
+        {
+          "id": 4836342,
+          "name": "Development",
+          "billable": true
+        },
+        {
+          "id": 4878357,
+          "name": "Information Architecture",
+          "billable": true
+        },
+        {
+          "id": 733903,
+          "name": "Project Management",
+          "billable": true
+        },
+        {
+          "id": 4878358,
+          "name": "QA",
+          "billable": true
+        },
+        {
+          "id": 4878365,
+          "name": "SEO",
+          "billable": true
+        },
+        {
+          "id": 5019706,
+          "name": "Strategy",
+          "billable": true
+        }
+      ],
+      "client": "Churchill Downs Racetrack",
+      "client_id": 3936632,
+      "client_currency": "United States Dollar - USD",
+      "client_currency_symbol": "$"
+    },
+    {
+      "id": 8835092,
+      "name": "Culture Foundry General",
+      "billable": false,
+      "code": "",
+      "tasks": [
+        {
+          "id": 4885928,
+          "name": "Accounting",
+          "billable": false
+        },
+        {
+          "id": 733902,
+          "name": "Administration",
+          "billable": false
+        },
+        {
+          "id": 4878334,
+          "name": "Analytics",
+          "billable": false
+        },
+        {
+          "id": 733904,
+          "name": "Business Development",
+          "billable": false
+        },
+        {
+          "id": 6136326,
+          "name": "Damn You Lumbergh",
+          "billable": false
+        },
+        {
+          "id": 4878349,
+          "name": "Holiday",
+          "billable": false
+        },
+        {
+          "id": 5251174,
+          "name": "Insurance",
+          "billable": false
+        },
+        {
+          "id": 4878431,
+          "name": "Marketing",
+          "billable": false
+        },
+        {
+          "id": 6058777,
+          "name": "People",
+          "billable": false
+        },
+        {
+          "id": 4878364,
+          "name": "Recruiting",
+          "billable": false
+        },
+        {
+          "id": 4878365,
+          "name": "SEO",
+          "billable": false
+        },
+        {
+          "id": 4878406,
+          "name": "Sick",
+          "billable": false
+        },
+        {
+          "id": 4878366,
+          "name": "Social Media",
+          "billable": false
+        },
+        {
+          "id": 5019706,
+          "name": "Strategy",
+          "billable": false
+        },
+        {
+          "id": 4885929,
+          "name": "Taxes",
+          "billable": false
+        },
+        {
+          "id": 4878456,
+          "name": "Team Meeting",
+          "billable": false
+        },
+        {
+          "id": 4878368,
+          "name": "Training",
+          "billable": false
+        },
+        {
+          "id": 4878371,
+          "name": "Travel",
+          "billable": false
+        },
+        {
+          "id": 733905,
+          "name": "Vacation",
+          "billable": false
+        }
+      ],
+      "client": "Culture Foundry",
+      "client_id": 455434,
+      "client_currency": "United States Dollar - USD",
+      "client_currency_symbol": "$"
+    },
+    {
+      "id": 12154171,
+      "name": "5390 - Nov 2016 Monthly Site Management",
+      "billable": true,
+      "code": "",
+      "tasks": [
+        {
+          "id": 733902,
+          "name": "Administration",
+          "billable": true
+        },
+        {
+          "id": 4878346,
+          "name": "Design",
+          "billable": true
+        },
+        {
+          "id": 4836342,
+          "name": "Development",
+          "billable": true
+        },
+        {
+          "id": 4878357,
+          "name": "Information Architecture",
+          "billable": true
+        },
+        {
+          "id": 733903,
+          "name": "Project Management",
+          "billable": true
+        },
+        {
+          "id": 4878358,
+          "name": "QA",
+          "billable": true
+        },
+        {
+          "id": 5019706,
+          "name": "Strategy",
+          "billable": true
+        }
+      ],
+      "client": "KUH 5390, LLC",
+      "client_id": 3887060,
+      "client_currency": "United States Dollar - USD",
+      "client_currency_symbol": "$"
+    },
+    {
+      "id": 9604095,
+      "name": "KBL - Vine Website Build",
+      "billable": true,
+      "code": "",
+      "tasks": [
+        {
+          "id": 733902,
+          "name": "Administration",
+          "billable": true
+        },
+        {
+          "id": 4878346,
+          "name": "Design",
+          "billable": true
+        },
+        {
+          "id": 4836342,
+          "name": "Development",
+          "billable": true
+        },
+        {
+          "id": 4878357,
+          "name": "Information Architecture",
+          "billable": true
+        },
+        {
+          "id": 733903,
+          "name": "Project Management",
+          "billable": true
+        },
+        {
+          "id": 4878358,
+          "name": "QA",
+          "billable": true
+        }
+      ],
+      "client": "KUH Vine Street LLC",
+      "client_id": 3887064,
+      "client_currency": "United States Dollar - USD",
+      "client_currency_symbol": "$"
+    },
+    {
+      "id": 12154135,
+      "name": "KoelbelUrbanHomes.com - Nov 2016 Monthly Site Management",
+      "billable": true,
+      "code": "",
+      "tasks": [
+        {
+          "id": 733902,
+          "name": "Administration",
+          "billable": true
+        },
+        {
+          "id": 4878346,
+          "name": "Design",
+          "billable": true
+        },
+        {
+          "id": 4836342,
+          "name": "Development",
+          "billable": true
+        },
+        {
+          "id": 4878357,
+          "name": "Information Architecture",
+          "billable": true
+        },
+        {
+          "id": 733903,
+          "name": "Project Management",
+          "billable": true
+        },
+        {
+          "id": 4878358,
+          "name": "QA",
+          "billable": true
+        },
+        {
+          "id": 5019706,
+          "name": "Strategy",
+          "billable": true
+        }
+      ],
+      "client": "Koelbel Urban Homes LLC",
+      "client_id": 3781876,
+      "client_currency": "United States Dollar - USD",
+      "client_currency_symbol": "$"
+    },
+    {
+      "id": 9813798,
+      "name": "MiaDonna Web Site Build",
+      "billable": true,
+      "code": "",
+      "tasks": [
+        {
+          "id": 733902,
+          "name": "Administration",
+          "billable": true
+        },
+        {
+          "id": 733904,
+          "name": "Business Development",
+          "billable": false
+        },
+        {
+          "id": 4878346,
+          "name": "Design",
+          "billable": true
+        },
+        {
+          "id": 4836342,
+          "name": "Development",
+          "billable": true
+        },
+        {
+          "id": 4878357,
+          "name": "Information Architecture",
+          "billable": true
+        },
+        {
+          "id": 733903,
+          "name": "Project Management",
+          "billable": true
+        },
+        {
+          "id": 4878358,
+          "name": "QA",
+          "billable": true
+        },
+        {
+          "id": 5019706,
+          "name": "Strategy",
+          "billable": true
+        }
+      ],
+      "client": "MiaDonna & Company",
+      "client_id": 4145758,
+      "client_currency": "United States Dollar - USD",
+      "client_currency_symbol": "$"
+    },
+    {
+      "id": 9292184,
+      "name": "NYRA Web Site Builds x 5",
+      "billable": true,
+      "code": "",
+      "tasks": [
+        {
+          "id": 733902,
+          "name": "Administration",
+          "billable": true
+        },
+        {
+          "id": 733904,
+          "name": "Business Development",
+          "billable": false
+        },
+        {
+          "id": 4878341,
+          "name": "Content Strategy",
+          "billable": true
+        },
+        {
+          "id": 4878346,
+          "name": "Design",
+          "billable": true
+        },
+        {
+          "id": 4836342,
+          "name": "Development",
+          "billable": true
+        },
+        {
+          "id": 4878357,
+          "name": "Information Architecture",
+          "billable": true
+        },
+        {
+          "id": 733903,
+          "name": "Project Management",
+          "billable": true
+        },
+        {
+          "id": 4878358,
+          "name": "QA",
+          "billable": true
+        },
+        {
+          "id": 5019706,
+          "name": "Strategy",
+          "billable": true
+        }
+      ],
+      "client": "NYRA - New York Racing Association",
+      "client_id": 3954262,
+      "client_currency": "United States Dollar - USD",
+      "client_currency_symbol": "$"
+    },
+    {
+      "id": 12154155,
+      "name": "NYRABets.com - Nov 2016 Monthly Site Management",
+      "billable": true,
+      "code": "",
+      "tasks": [
+        {
+          "id": 733902,
+          "name": "Administration",
+          "billable": true
+        },
+        {
+          "id": 4878346,
+          "name": "Design",
+          "billable": true
+        },
+        {
+          "id": 4836342,
+          "name": "Development",
+          "billable": true
+        },
+        {
+          "id": 4878357,
+          "name": "Information Architecture",
+          "billable": true
+        },
+        {
+          "id": 733903,
+          "name": "Project Management",
+          "billable": true
+        },
+        {
+          "id": 4878358,
+          "name": "QA",
+          "billable": true
+        },
+        {
+          "id": 5019706,
+          "name": "Strategy",
+          "billable": true
+        }
+      ],
+      "client": "NYRA - New York Racing Association",
+      "client_id": 3954262,
+      "client_currency": "United States Dollar - USD",
+      "client_currency_symbol": "$"
+    },
+    {
+      "id": 11898807,
+      "name": "NYRABets.com - Oct 2016 Monthly Site Management",
+      "billable": true,
+      "code": "",
+      "tasks": [
+        {
+          "id": 733902,
+          "name": "Administration",
+          "billable": true
+        },
+        {
+          "id": 4878346,
+          "name": "Design",
+          "billable": true
+        },
+        {
+          "id": 4836342,
+          "name": "Development",
+          "billable": true
+        },
+        {
+          "id": 4878357,
+          "name": "Information Architecture",
+          "billable": true
+        },
+        {
+          "id": 733903,
+          "name": "Project Management",
+          "billable": true
+        },
+        {
+          "id": 4878358,
+          "name": "QA",
+          "billable": true
+        },
+        {
+          "id": 5019706,
+          "name": "Strategy",
+          "billable": true
+        }
+      ],
+      "client": "NYRA - New York Racing Association",
+      "client_id": 3954262,
+      "client_currency": "United States Dollar - USD",
+      "client_currency_symbol": "$"
+    },
+    {
+      "id": 10659302,
+      "name": "Organic India BigCommerce Store",
+      "billable": true,
+      "code": "",
+      "tasks": [
+        {
+          "id": 733902,
+          "name": "Administration",
+          "billable": true
+        },
+        {
+          "id": 4878346,
+          "name": "Design",
+          "billable": true
+        },
+        {
+          "id": 4836342,
+          "name": "Development",
+          "billable": true
+        },
+        {
+          "id": 4878357,
+          "name": "Information Architecture",
+          "billable": true
+        },
+        {
+          "id": 733903,
+          "name": "Project Management",
+          "billable": true
+        },
+        {
+          "id": 4878358,
+          "name": "QA",
+          "billable": true
+        }
+      ],
+      "client": "Organic India",
+      "client_id": 3781887,
+      "client_currency": "United States Dollar - USD",
+      "client_currency_symbol": "$"
+    }
+  ]
+}

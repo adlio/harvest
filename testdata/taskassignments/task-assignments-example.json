@@ -1,0 +1,128 @@
+[
+  {
+    "task_assignment": {
+      "project_id": 9292184,
+      "task_id": 733902,
+      "billable": true,
+      "deactivated": false,
+      "hourly_rate": 150,
+      "budget": null,
+      "id": 101061850,
+      "created_at": "2015-11-05T21:06:57Z",
+      "updated_at": "2016-02-24T08:06:29Z",
+      "estimate": null
+    }
+  },
+  {
+    "task_assignment": {
+      "project_id": 9292184,
+      "task_id": 733903,
+      "billable": true,
+      "deactivated": false,
+      "hourly_rate": 150,
+      "budget": null,
+      "id": 101061854,
+      "created_at": "2015-11-05T21:06:57Z",
+      "updated_at": "2015-11-05T21:06:57Z",
+      "estimate": null
+    }
+  },
+  {
+    "task_assignment": {
+      "project_id": 9292184,
+      "task_id": 733904,
+      "billable": false,
+      "deactivated": false,
+      "hourly_rate": 150,
+      "budget": null,
+      "id": 101063204,
+      "created_at": "2015-11-05T21:09:12Z",
+      "updated_at": "2015-11-05T21:09:12Z",
+      "estimate": null
+    }
+  },
+  {
+    "task_assignment": {
+      "project_id": 9292184,
+      "task_id": 4836342,
+      "billable": true,
+      "deactivated": false,
+      "hourly_rate": 150,
+      "budget": null,
+      "id": 101061852,
+      "created_at": "2015-11-05T21:06:57Z",
+      "updated_at": "2015-11-05T21:06:57Z",
+      "estimate": null
+    }
+  },
+  {
+    "task_assignment": {
+      "project_id": 9292184,
+      "task_id": 4878341,
+      "billable": true,
+      "deactivated": false,
+      "hourly_rate": 150,
+      "budget": null,
+      "id": 109258535,
+      "created_at": "2016-02-24T08:06:29Z",
+      "updated_at": "2016-02-24T08:06:29Z",
+      "estimate": null
+    }
+  },
+  {
+    "task_assignment": {
+      "project_id": 9292184,
+      "task_id": 4878346,
+      "billable": true,
+      "deactivated": false,
+      "hourly_rate": 150,
+      "budget": null,
+      "id": 101061851,
+      "created_at": "2015-11-05T21:06:57Z",
+      "updated_at": "2015-11-05T21:06:57Z",
+      "estimate": null
+    }
+  },
+  {
+    "task_assignment": {
+      "project_id": 9292184,
+      "task_id": 4878357,
+      "billable": true,
+      "deactivated": false,
+      "hourly_rate": 150,
+      "budget": null,
+      "id": 101061853,
+      "created_at": "2015-11-05T21:06:57Z",
+      "updated_at": "2015-11-05T21:06:57Z",
+      "estimate": null
+    }
+  },
+  {
+    "task_assignment": {
+      "project_id": 9292184,
+      "task_id": 4878358,
+      "billable": true,
+      "deactivated": false,
+      "hourly_rate": 150,
+      "budget": null,
+      "id": 101061855,
+      "created_at": "2015-11-05T21:06:57Z",
+      "updated_at": "2015-11-05T21:06:57Z",
+      "estimate": null
+    }
+  },
+  {
+    "task_assignment": {
+      "project_id": 9292184,
+      "task_id": 5019706,
+      "billable": true,
+      "deactivated": false,
+      "hourly_rate": 150,
+      "budget": null,
+      "id": 109258536,
+      "created_at": "2016-02-24T08:06:29Z",
+      "updated_at": "2016-02-24T08:06:29Z",
+      "estimate": null
+    }
+  }
+]
