@@ -54,11 +54,15 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">github.com/adlio/harvest/api.go (76.0%)</option>
+				<option value="file0">github.com/adlio/harvest/api.go (73.1%)</option>
 				
 				<option value="file1">github.com/adlio/harvest/arguments.go (80.0%)</option>
 				
-				<option value="file2">github.com/adlio/harvest/project.go (57.1%)</option>
+				<option value="file2">github.com/adlio/harvest/day_entry.go (100.0%)</option>
+				
+				<option value="file3">github.com/adlio/harvest/project.go (100.0%)</option>
+				
+				<option value="file4">github.com/adlio/harvest/task-assignment.go (100.0%)</option>
 				
 				</select>
 			</div>
@@ -104,7 +108,7 @@ func NewBasicAuthAPI(subdomain, user, password string) *API <span class="cov8" t
 }</span>
 
 func (a *API) Get(path string, args Arguments, target interface{}) error <span class="cov8" title="1">{
-        url := fmt.Sprintf("%s/%s", a.BaseURL, path)
+        url := fmt.Sprintf("%s%s", a.BaseURL, path)
         urlWithParams := fmt.Sprintf("%s?%s", url, args.ToURLValues().Encode())
 
         req, err := http.NewRequest("GET", urlWithParams, nil)
@@ -118,7 +122,8 @@ func (a *API) Get(path string, args Arguments, target interface{}) error <span c
         }</span>
         <span class="cov8" title="1">defer resp.Body.Close()
         if resp.StatusCode != 200 </span><span class="cov0" title="0">{
-                body, err := ioutil.ReadAll(resp.Body)
+                var body []byte
+                body, err = ioutil.ReadAll(resp.Body)
                 return errors.Errorf("HTTP request failure on %s: %s %s", url, string(body), err)
         }</span>
 
@@ -166,34 +171,71 @@ import (
         "time"
 )
 
+type DayEntryResponse struct {
+        DayEntries []*DayEntry `json:"day_entries"`
+}
+
+type DayEntry struct {
+        ID                int64     `json:"id"`
+        UserID            int64     `json:"user_id"`
+        SpentAt           string    `json:"spent_at"`
+        CreatedAt         time.Time `json:"created_at"`
+        UpdatedAt         time.Time `json:"updated_at"`
+        ProjectID         string    `json:"project_id"`
+        TaskID            string    `json:"task_id"`
+        Project           string    `json:"project"`
+        Task              string    `json:"task"`
+        Client            string    `json:"client"`
+        Notes             string    `json:"notes"`
+        HoursWithoutTimer int64     `json:"hours_without_timer"`
+        Hours             int64     `json:"hours"`
+}
+
+func (a *API) GetTodayEntry(args Arguments) (dayentries []*DayEntry, err error) <span class="cov8" title="1">{
+        dayEntriesResponse := DayEntryResponse{}
+        path := fmt.Sprintf("/daily?slim=1")
+        err = a.Get(path, args, &amp;dayEntriesResponse)
+        return dayEntriesResponse.DayEntries, err
+}</span>
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package harvest
+
+import (
+        "fmt"
+        "time"
+)
+
 type ProjectResponse struct {
         Project *Project `json:"project"`
 }
 
 type Project struct {
-        ID                               int64  `json:"id"`
-        ClientID                         int64  `json:"client_id"`
-        Name                             string `json:"name"`
-        Code                             string
-        Active                           bool
-        Billable                         bool
-        BillBy                           string
-        HourlyRate                       *float64
-        BudgetBy                         string
-        Budget                           *float64
-        NotifyWhenOverBudget             bool
-        OverBudgetNotificationPercentage float64
-        OverBudgetNotifiedAt             time.Time
-        ShowBudgetToAll                  bool
-        CreatedAt                        time.Time
-        UpdatedAt                        time.Time
-        StartsOn                         *Date
-        EndsOn                           *Date
-        Estimate                         *float64
-        EstimateBy                       string
-        Notes                            string
-        CostBudget                       *float64
-        CostBudgetIncludeExpenses        bool
+        ID                               int64      `json:"id"`
+        ClientID                         int64      `json:"client_id"`
+        Name                             string     `json:"name"`
+        Code                             string     `json:"code"`
+        Active                           bool       `json:"active"`
+        Billable                         bool       `json:"billable"`
+        BillBy                           string     `json:"bill_by"`
+        HourlyRate                       *float64   `json:"hourly_rate"`
+        BudgetBy                         string     `json:"budget_by"`
+        Budget                           *float64   `json:"budget"`
+        NotifyWhenOverBudget             bool       `json:"notify_when_over_budget"`
+        OverBudgetNotificationPercentage float64    `json:"over_budget_notification_percentage"`
+        OverBudgetNotifiedAt             *time.Time `json:"over_budget_notified_at"`
+        ShowBudgetToAll                  bool       `json:"show_budget_to_all"`
+        CreatedAt                        time.Time  `json:"created_at"`
+        UpdatedAt                        time.Time  `json:"updated_at"`
+        StartsOn                         string     `json:"starts_on"`
+        EndsOn                           string     `json:"ends_on"`
+        Estimate                         *float64   `json:"estimate"`
+        EstimateBy                       string     `json:"estimate_by"`
+        HintEarliestRecordAt             string     `json:"hint_earliest_record_at"`
+        HintLatestRecordAt               string     `json:"hint_latest_record_at"`
+        Notes                            string     `json:"notes"`
+        CostBudget                       *float64   `json:"cost_budget"`
+        CostBudgetIncludeExpenses        bool       `json:"cost_budget_include_expenses"`
 }
 
 func (a *API) GetProject(projectID int64, args Arguments) (project *Project, err error) <span class="cov8" title="1">{
@@ -203,11 +245,50 @@ func (a *API) GetProject(projectID int64, args Arguments) (project *Project, err
         return projectResponse.Project, err
 }</span>
 
-func (a *API) GetProjects(args Arguments) (projects []*Project, err error) <span class="cov0" title="0">{
+func (a *API) GetProjects(args Arguments) (projects []*Project, err error) <span class="cov8" title="1">{
+        projects = make([]*Project, 0)
+        projectsResponse := make([]*ProjectResponse, 0)
         path := fmt.Sprintf("/projects")
-        err = a.Get(path, args, &amp;projects)
-        return
-}</span>
+        err = a.Get(path, args, &amp;projectsResponse)
+        for _, pr := range projectsResponse </span><span class="cov8" title="1">{
+                projects = append(projects, pr.Project)
+        }</span>
+        <span class="cov8" title="1">return projects, err</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package harvest
+
+import (
+        "fmt"
+        "time"
+)
+
+type TaskAssignmentResponse struct {
+        TaskAssignment *TaskAssignment `json:"task_assignment"`
+}
+
+type TaskAssignment struct {
+        ID          int64     `json:"id"`
+        ProjectID   int64     `json:"project_id"`
+        TaskID      int64     `json:"task_id"`
+        Billable    bool      `json:"billable"`
+        Deactivated bool      `json:"deactivated"`
+        Budget      *float64  `json:"budget"`
+        HourlyRate  *float64  `json:"hourly_rate"`
+        UpdatedAt   time.Time `json:"updated_at"`
+        CreatedAt   time.Time `json:"created_at"`
+}
+
+func (a *API) GetTaskAssignments(projectID int64, args Arguments) (taskassignments []*TaskAssignment, err error) <span class="cov8" title="1">{
+        taskAssignmentsResponse := make([]*TaskAssignmentResponse, 0)
+        path := fmt.Sprintf("/projects/%v/task_assignments", projectID)
+        err = a.Get(path, args, &amp;taskAssignmentsResponse)
+        for _, ta := range taskAssignmentsResponse </span><span class="cov8" title="1">{
+                taskassignments = append(taskassignments, ta.TaskAssignment)
+        }</span>
+        <span class="cov8" title="1">return taskassignments, err</span>
+}
 </pre>
 		
 		</div>

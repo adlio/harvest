@@ -1,0 +1,14 @@
+{
+  "user_assignment": {
+    "user_id": 1000000,
+    "project_id": 9999999,
+    "is_project_manager": false,
+    "deactivated": false,
+    "hourly_rate": 99,
+    "id": 88888888,
+    "budget": null,
+    "created_at": "2015-12-21T15:08:43Z",
+    "updated_at": "2015-12-21T15:08:43Z",
+    "estimate": null
+  }
+}

@@ -30,3 +30,10 @@ func (a *API) GetTaskAssignments(projectID int64, args Arguments) (taskassignmen
 	}
 	return taskassignments, err
 }
+
+func (a *API) GetTaskAssignment(projectID int64, taskAssignmentID int64, args Arguments) (taskassignment *TaskAssignment, err error) {
+	taskAssignmentResponse := TaskAssignmentResponse{}
+	path := fmt.Sprintf("/projects/%v/task_assignments/%v", projectID, taskAssignmentID)
+	err = a.Get(path, args, &taskAssignmentResponse)
+	return taskAssignmentResponse.TaskAssignment, err
+}
