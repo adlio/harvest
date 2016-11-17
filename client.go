@@ -1,8 +1,13 @@
 package harvest
 
 import (
+	"fmt"
 	"time"
 )
+
+type ClientResponse struct {
+	Client *Client `json:"client"`
+}
 
 type Client struct {
 	ID                      int64     `json:"id"`
@@ -17,4 +22,21 @@ type Client struct {
 	Details                 string    `json:"details"`
 	DefaultInvoiceTimeframe string    `json:"default_invoice_timeframe"`
 	LastInvoiceKind         string    `json:"last_invoice_kind"`
+}
+
+func (a *API) GetClient(clientID int64, args Arguments) (client *Client, err error) {
+	clientResponse := ClientResponse{}
+	path := fmt.Sprintf("/clients/%v", clientID)
+	err = a.Get(path, args, &clientResponse)
+	return clientResponse.Client, err
+}
+
+func (a *API) GetClients(args Arguments) (clients []*Client, err error) {
+	clientsResponse := make([]*ClientResponse, 0)
+	path := fmt.Sprintf("/clients")
+	err = a.Get(path, args, &clientsResponse)
+	for _, cr := range clientsResponse {
+		clients = append(clients, cr.Client)
+	}
+	return clients, err
 }

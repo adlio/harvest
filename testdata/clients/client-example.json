@@ -1,0 +1,16 @@
+{
+    "client": {
+        "id": 3398386,
+        "name": "Your Account",
+        "active": true,
+        "currency": "United States Dollar - USD",
+        "highrise_id": null,
+        "cache_version": 821859237,
+        "updated_at": "2015-04-15T16:25:50Z",
+        "created_at": "2015-04-15T16:25:50Z",
+        "currency_symbol": "$",
+        "details": "123 Main St\r\nAnytown, NY 12345",
+        "default_invoice_timeframe": null,
+        "last_invoice_kind": null
+    }
+}
