@@ -6,7 +6,7 @@ import (
 )
 
 type ContactResponse struct {
-	Contact *Contact `json:"client"`
+	Contact *Contact `json:"contact"`
 }
 
 type Contact struct {
@@ -28,6 +28,16 @@ func (a *API) GetContact(contactID int64, args Arguments) (contact *Contact, err
 	path := fmt.Sprintf("/contacts/%v", contactID)
 	err = a.Get(path, args, &contactResponse)
 	return contactResponse.Contact, err
+}
+
+func (a *API) GetClientContacts(clientID int64, args Arguments) (contacts []*Contact, err error) {
+	contactsResponse := make([]*ContactResponse, 0)
+	path := fmt.Sprintf("/clients/%v/contacts", clientID)
+	err = a.Get(path, args, &contactsResponse)
+	for _, cr := range contactsResponse {
+		contacts = append(contacts, cr.Contact)
+	}
+	return contacts, err
 }
 
 func (a *API) GetContacts(args Arguments) (contacts []*Contact, err error) {
