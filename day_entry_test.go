@@ -1,22 +1,51 @@
 package harvest
 
-import "testing"
+import (
+	"testing"
+	"time"
+)
 
-func TestGetTodayEntry(t *testing.T) {
+func TestGetTodayEntries(t *testing.T) {
 	a := testAPI()
-	dayEntryResponse := mockResponse("dayentries", "today-example.json")
+	dayEntryResponse := mockResponse("day_entries", "today-example.json")
 	a.BaseURL = dayEntryResponse.URL
-	dayentries, err := a.GetTodayEntry(Defaults())
+	dayEntries, err := a.GetTodayEntries(Defaults())
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(dayentries) != 2 {
-		t.Errorf("Incorrect number of entries '%v'", len(dayentries))
+	if len(dayEntries) != 2 {
+		t.Errorf("Incorrect number of entries %d", len(dayEntries))
 	}
-	if dayentries[0].ID != 538242480 {
-		t.Errorf("Incorrect day entry ID '%v'", dayentries[0].ID)
+	if dayEntries[0].ID != 538242480 {
+		t.Errorf("Incorrect day entry ID '%v'", dayEntries[0].ID)
 	}
-	if dayentries[1].UserID != 1420761 {
-		t.Errorf("Incorrect UserID '%v'", dayentries[1].ID)
+	if dayEntries[1].UserID != 1420761 {
+		t.Errorf("Incorrect UserID '%v'", dayEntries[1].ID)
+	}
+}
+
+func TestGetEntriesForProjectBetween(t *testing.T) {
+	a := testAPI()
+	projectResponse := mockResponse("day_entries", "project-example.json")
+	a.BaseURL = projectResponse.URL
+	dayEntries, err := a.GetEntriesForProjectBetween(3, time.Now().AddDate(-1, 0, 0), time.Now(), Defaults())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(dayEntries) != 3 {
+		t.Errorf("Incorrect number of entries %d", len(dayEntries))
+	}
+}
+
+func TestGetEntriesForUserBetween(t *testing.T) {
+	a := testAPI()
+	usersResponse := mockResponse("day_entries", "user-example.json")
+	a.BaseURL = usersResponse.URL
+	dayEntries, err := a.GetEntriesForUserBetween(1, time.Now().AddDate(-1, 0, 0), time.Now(), Defaults())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(dayEntries) != 2 {
+		t.Errorf("Incorrect number of entries %d", len(dayEntries))
 	}
 }
