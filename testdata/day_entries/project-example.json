@@ -1,0 +1,53 @@
+[  
+  {  
+    "day_entry":{  
+      "id":559966390,
+      "notes":"Sales call with new client",
+      "spent_at":"2017-01-11",
+      "hours":1.0,
+      "user_id":1,
+      "project_id":3,
+      "task_id":2,
+      "created_at":"2017-01-11T22:31:40Z",
+      "updated_at":"2017-01-12T16:32:29Z",
+      "adjustment_record":false,
+      "timer_started_at":null,
+      "is_closed":false,
+      "is_billed":false
+    }
+  },
+  {  
+    "day_entry":{  
+      "id":559983812,
+      "notes":"review website and client call",
+      "spent_at":"2017-01-11",
+      "hours":1.0,
+      "user_id":1,
+      "project_id":3,
+      "task_id":2,
+      "created_at":"2017-01-11T23:10:01Z",
+      "updated_at":"2017-01-11T23:40:18Z",
+      "adjustment_record":false,
+      "timer_started_at":null,
+      "is_closed":false,
+      "is_billed":false
+    }
+  },
+  {  
+    "day_entry":{  
+      "id":564081813,
+      "notes":"Next steps",
+      "spent_at":"2017-01-20",
+      "hours":0.75,
+      "user_id":1,
+      "project_id":3,
+      "task_id":2,
+      "created_at":"2017-01-21T06:42:59Z",
+      "updated_at":"2017-01-21T06:42:59Z",
+      "adjustment_record":false,
+      "timer_started_at":null,
+      "is_closed":false,
+      "is_billed":false
+    }
+  }
+]
