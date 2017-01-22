@@ -35,6 +35,9 @@ func TestGetEntriesForProjectBetween(t *testing.T) {
 	if len(dayEntries) != 3 {
 		t.Errorf("Incorrect number of entries %d", len(dayEntries))
 	}
+	if dayEntries[0].ProjectID != 3 {
+		t.Errorf("Expected 3 for ProjectID, got %d", dayEntries[0].ProjectID)
+	}
 }
 
 func TestGetEntriesForUserBetween(t *testing.T) {
@@ -47,5 +50,14 @@ func TestGetEntriesForUserBetween(t *testing.T) {
 	}
 	if len(dayEntries) != 2 {
 		t.Errorf("Incorrect number of entries %d", len(dayEntries))
+	}
+	if dayEntries[0].ProjectID != 2 {
+		t.Errorf("Expected ProjectID 2, got %d", dayEntries[0].ProjectID)
+	}
+	if dayEntries[0].Notes != "First task" {
+		t.Errorf("Expected 'First task', got '%s'.", dayEntries[0].Notes)
+	}
+	if dayEntries[1].Notes != "" {
+		t.Errorf("Expected blank Notes, got %v", dayEntries[1].Notes)
 	}
 }
