@@ -67,4 +67,48 @@ func TestGetProjectWithStartEndDates(t *testing.T) {
 	if project.Name != "TEST" {
 		t.Errorf("Expected 'TEST', got '%s'.", project.Name)
 	}
+
+	if !project.Active {
+		t.Error("Project should have been active")
+	}
+
+	if !project.NotifyWhenOverBudget {
+		t.Error("Should notify when over budget.")
+	}
+
+	if project.OverBudgetNotificationPercentage != 80.0 {
+		t.Errorf("Expected '80.00', got '%0.2f'", project.OverBudgetNotificationPercentage)
+	}
+
+	if project.StartsOn.Format("2006-01-02") != "2017-01-01" {
+		t.Errorf("Expected '2017-01-01', got '%s'", project.StartsOn.Format("2006-01-02"))
+	}
+
+	if project.EndsOn.Format("2006-01-02") != "2017-01-31" {
+		t.Errorf("Expected '2017-01-31', got '%s'", project.EndsOn.Format("2006-01-02"))
+	}
+
+	if project.ShowBudgetToAll {
+		t.Error("Project budget should be hidden")
+	}
+
+	if *project.Estimate != 24.0 {
+		t.Errorf("Expected 24.0 budget. got %0.2f", *project.Estimate)
+	}
+
+	if project.EstimateBy != "project" {
+		t.Errorf("Expected 'project' EstimateBy, got '%s'", project.EstimateBy)
+	}
+
+	if project.HintEarliestRecordAt.Format("2006-01-02") != "2017-01-03" {
+		t.Errorf("Expected '2017-01-03', got '%s'", project.HintEarliestRecordAt.Format("2006-01-02"))
+	}
+
+	if project.Notes != "This is the notes." {
+		t.Errorf("Expected 'This is the notes.', Got '%s'", project.Notes)
+	}
+
+	if *project.HourlyRate != 120.0 {
+		t.Errorf("Expected '120.00', got '%0.2f'", *project.HourlyRate)
+	}
 }
