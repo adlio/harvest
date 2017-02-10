@@ -54,3 +54,17 @@ func TestGetProjects(t *testing.T) {
 		t.Errorf("Incorrect Project budget by '%s'", projects[3].BudgetBy)
 	}
 }
+
+func TestGetProjectWithStartEndDates(t *testing.T) {
+	a := testAPI()
+	projectResponse := mockResponse("projects", "12670372.json")
+	a.BaseURL = projectResponse.URL
+	project, err := a.GetProject(12670372, Defaults())
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if project.Name != "TEST" {
+		t.Errorf("Expected 'TEST', got '%s'.", project.Name)
+	}
+}

@@ -34,6 +34,10 @@ func (a *API) Get(path string, args Arguments, target interface{}) error {
 	urlWithParams := fmt.Sprintf("%s?%s", url, args.ToURLValues().Encode())
 
 	req, err := http.NewRequest("GET", urlWithParams, nil)
+	req.Header.Set("Accept", "application/json")
+	if a.User != "" && a.Password != "" {
+		req.SetBasicAuth(a.User, a.Password)
+	}
 	if err != nil {
 		return errors.Wrapf(err, "Invalid GET request %s", url)
 	}
