@@ -10,7 +10,7 @@ type UserResponse struct {
 }
 
 type User struct {
-	ID                           int       `json:"id"`
+	ID                           int64     `json:"id"`
 	Email                        string    `json:"email"`
 	CreatedAt                    time.Time `json:"created_at"`
 	IsAdmin                      bool      `json:"is_admin"`
@@ -21,13 +21,13 @@ type User struct {
 	Telephone                    string    `json:"telephone"`
 	IsActive                     bool      `json:"is_active"`
 	HasAccessToAllFutureProjects bool      `json:"has_access_to_all_future_projects"`
-	DefaultHourlyRate            int       `json:"default_hourly_rate"`
+	DefaultHourlyRate            float64   `json:"default_hourly_rate"`
 	Department                   string    `json:"department"`
 	WantsNewsletter              bool      `json:"wants_newsletter"`
 	UpdatedAt                    time.Time `json:"updated_at"`
-	CostRate                     int       `json:"cost_rate"`
-	IdentityAccountID            int       `json:"identity_account_id"`
-	IdentityUserID               int       `json:"identity_user_id"`
+	CostRate                     float64   `json:"cost_rate"`
+	IdentityAccountID            int64     `json:"identity_account_id"`
+	IdentityUserID               int64     `json:"identity_user_id"`
 }
 
 func (a *API) GetUser(userID int64, args Arguments) (user *User, err error) {
