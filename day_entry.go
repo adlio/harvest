@@ -28,12 +28,16 @@ type DayEntry struct {
 	ProjectID         int64
 	TaskRaw           json.RawMessage `json:"task_id"`
 	TaskID            int64
-	Project           string  `json:"project"`
-	Task              string  `json:"task"`
-	Client            string  `json:"client"`
-	Notes             string  `json:"notes"`
-	HoursWithoutTimer int64   `json:"hours_without_timer"`
-	Hours             float64 `json:"hours"`
+	Project           string     `json:"project"`
+	Task              string     `json:"task"`
+	Client            string     `json:"client"`
+	Notes             string     `json:"notes"`
+	HoursWithoutTimer int64      `json:"hours_without_timer"`
+	Hours             float64    `json:"hours"`
+	TimerStartedAt    *time.Time `json:"timer_started_at"`
+	AdjustmentRecord  bool       `json:"adjustment_record"`
+	IsClosed          bool       `json:"is_closed"`
+	IsBilled          bool       `json:"is_billed"`
 }
 
 // Needed to avoid recursion in UnmarshalJSON
@@ -81,7 +85,7 @@ func (a *API) GetTodayEntries(args Arguments) ([]*DayEntry, error) {
 func (a *API) GetEntriesForProjectBetween(projectID int64, fromDate time.Time, toDate time.Time, args Arguments) ([]*DayEntry, error) {
 	response := make(DayEntryReport, 0)
 	from := fromDate.Format("20060102")
-	to := fromDate.Format("20060102")
+	to := toDate.Format("20060102")
 	path := fmt.Sprintf("/projects/%d/entries?from=%s&to=%s", projectID, from, to)
 	err := a.Get(path, args, &response)
 	return response.Entries(), err
@@ -90,7 +94,7 @@ func (a *API) GetEntriesForProjectBetween(projectID int64, fromDate time.Time, t
 func (a *API) GetEntriesForUserBetween(userID int64, fromDate time.Time, toDate time.Time, args Arguments) ([]*DayEntry, error) {
 	response := make(DayEntryReport, 0)
 	from := fromDate.Format("20060102")
-	to := fromDate.Format("20060102")
+	to := toDate.Format("20060102")
 	path := fmt.Sprintf("/people/%d/entries?from=%s&to=%s", userID, from, to)
 	err := a.Get(path, args, &response)
 	return response.Entries(), err
