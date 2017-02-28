@@ -19,9 +19,10 @@ type DayEntryReportRow struct {
 }
 
 type DayEntry struct {
-	ID                int64           `json:"id"`
-	UserID            int64           `json:"user_id"`
-	SpentAt           string          `json:"spent_at"`
+	ID                int64  `json:"id"`
+	UserID            int64  `json:"user_id"`
+	SpentAtRaw        string `json:"spent_at"`
+	SpentAt           time.Time
 	CreatedAt         time.Time       `json:"created_at"`
 	UpdatedAt         time.Time       `json:"updated_at"`
 	ProjectRaw        json.RawMessage `json:"project_id"`
@@ -47,6 +48,11 @@ func (dayEntry *DayEntry) UnmarshalJSON(b []byte) (err error) {
 	d, s, i := dayentry{}, "", float64(0.0)
 
 	if err = json.Unmarshal(b, &d); err == nil {
+
+		if d.SpentAt, err = time.Parse("2006-01-02", d.SpentAtRaw); err != nil {
+			return err
+		}
+
 		if err = json.Unmarshal(d.ProjectRaw, &s); err == nil {
 			i, err = strconv.ParseFloat(s, 64)
 			d.ProjectID = int64(i)

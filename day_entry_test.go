@@ -22,6 +22,15 @@ func TestGetTodayEntries(t *testing.T) {
 	if dayEntries[1].UserID != 1420761 {
 		t.Errorf("Incorrect UserID '%v'", dayEntries[1].ID)
 	}
+	if dayEntries[1].SpentAtRaw != "2016-11-15" {
+		t.Errorf("Incorrect SpentAtRaw '%s'", dayEntries[1].SpentAtRaw)
+	}
+	if dayEntries[1].SpentAt.IsZero() {
+		t.Error("dayEntries[1].SpentAt should be a populated time.Time")
+	}
+	if dayEntries[1].SpentAt.Format("2006-01-02") != "2016-11-15" {
+		t.Errorf("Expected '2016-11-15'. Got '%s'.", dayEntries[1].SpentAt.Format("2006-01-01"))
+	}
 }
 
 func TestGetEntriesForProjectBetween(t *testing.T) {
