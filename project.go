@@ -39,7 +39,7 @@ type Project struct {
 
 func (a *API) GetProject(projectID int64, args Arguments) (project *Project, err error) {
 	projectResponse := ProjectResponse{}
-	path := fmt.Sprintf("/projects/%v", projectID)
+	path := fmt.Sprintf("/projects/%d", projectID)
 	err = a.Get(path, args, &projectResponse)
 	return projectResponse.Project, err
 }
