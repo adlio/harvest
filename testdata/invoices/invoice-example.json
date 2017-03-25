@@ -1,0 +1,33 @@
+{
+  "invoices": {
+    "id": 12286767,
+    "client_id": 3781881,
+    "period_start": null,
+    "period_end": null,
+    "number": "20151058",
+    "issued_at": "2017-04-01",
+    "due_at": "2017-05-01",
+    "amount": 54.6,
+    "currency": "United States Dollar - USD",
+    "state": "draft",
+    "notes": "Thank you in advance for your prompt payment, which is essential to our ability to best serve you.",
+    "purchase_order": "",
+    "due_amount": 54.6,
+    "due_at_human_format": "Net 30",
+    "created_at": "2017-03-23T16:26:14Z",
+    "updated_at": "2017-03-23T16:27:07Z",
+    "tax": null,
+    "tax_amount": 0,
+    "subject": "An Invoice for Some Kind of Service",
+    "recurring_invoice_id": null,
+    "tax2": null,
+    "tax2_amount": 0,
+    "client_key": "e7a870f48d78c1f1357ff7df9da710c7902f862b",
+    "estimate_id": null,
+    "discount": null,
+    "discount_amount": 0,
+    "retainer_id": null,
+    "created_by_id": 1110008,
+    "client_name": "Acme Client Company, Inc."
+  }
+}
