@@ -39,8 +39,6 @@ func mockDynamicPathResponse() *httptest.Server {
 		parts[len(parts)-1] = parts[len(parts)-1] + ".json"
 		filename := filepath.Join(parts...)
 
-		fmt.Println(filename)
-
 		if _, err := os.Stat(filename); os.IsNotExist(err) {
 			http.Error(rw, fmt.Sprintf("%s doesn't exist. Create it with the mock you'd like to use.\n Args were: %s", filename, queryStringPart), http.StatusNotFound)
 			return
