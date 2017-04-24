@@ -17,6 +17,7 @@ type TaskAssignment struct {
 	Deactivated bool      `json:"deactivated"`
 	Budget      *float64  `json:"budget"`
 	HourlyRate  *float64  `json:"hourly_rate"`
+	Estimate    *float64  `json:"estimate"`
 	UpdatedAt   time.Time `json:"updated_at"`
 	CreatedAt   time.Time `json:"created_at"`
 }
