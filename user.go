@@ -26,6 +26,7 @@ type User struct {
 	WantsNewsletter              bool      `json:"wants_newsletter"`
 	UpdatedAt                    time.Time `json:"updated_at"`
 	CostRate                     float64   `json:"cost_rate"`
+	WeeklyCapacity               int64     `json:"weekly_capacity"`
 	IdentityAccountID            int64     `json:"identity_account_id"`
 	IdentityUserID               int64     `json:"identity_user_id"`
 }
