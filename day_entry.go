@@ -19,26 +19,26 @@ type DayEntryReportRow struct {
 }
 
 type DayEntry struct {
-	ID                int64  `json:"id"`
-	UserID            int64  `json:"user_id"`
-	SpentAtRaw        string `json:"spent_at"`
-	SpentAt           time.Time
-	CreatedAt         time.Time       `json:"created_at"`
-	UpdatedAt         time.Time       `json:"updated_at"`
-	ProjectRaw        json.RawMessage `json:"project_id"`
-	ProjectID         int64
-	TaskRaw           json.RawMessage `json:"task_id"`
-	TaskID            int64
-	Project           string     `json:"project"`
-	Task              string     `json:"task"`
-	Client            string     `json:"client"`
-	Notes             string     `json:"notes"`
-	HoursWithoutTimer int64      `json:"hours_without_timer"`
-	Hours             float64    `json:"hours"`
-	TimerStartedAt    *time.Time `json:"timer_started_at"`
-	AdjustmentRecord  bool       `json:"adjustment_record"`
-	IsClosed          bool       `json:"is_closed"`
-	IsBilled          bool       `json:"is_billed"`
+	ID               int64  `json:"id"`
+	UserID           int64  `json:"user_id"`
+	SpentAtRaw       string `json:"spent_at"`
+	SpentAt          time.Time
+	CreatedAt        time.Time       `json:"created_at"`
+	UpdatedAt        time.Time       `json:"updated_at"`
+	ProjectRaw       json.RawMessage `json:"project_id"`
+	ProjectID        int64
+	TaskRaw          json.RawMessage `json:"task_id"`
+	TaskID           int64
+	Project          string     `json:"project"`
+	Task             string     `json:"task"`
+	Client           string     `json:"client"`
+	Notes            string     `json:"notes"`
+	HoursWithTimer   float64    `json:"hours_with_timer"`
+	Hours            float64    `json:"hours"`
+	TimerStartedAt   *time.Time `json:"timer_started_at"`
+	AdjustmentRecord bool       `json:"adjustment_record"`
+	IsClosed         bool       `json:"is_closed"`
+	IsBilled         bool       `json:"is_billed"`
 }
 
 // Needed to avoid recursion in UnmarshalJSON
