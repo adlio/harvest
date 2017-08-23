@@ -112,3 +112,20 @@ func TestGetProjectWithStartEndDates(t *testing.T) {
 		t.Errorf("Expected '120.00', got '%0.2f'", *project.HourlyRate)
 	}
 }
+
+func TestCreateProject(t *testing.T) {
+	a := testAPI()
+	emptyResponse := mockResponse("common/empty")
+	a.BaseURL = emptyResponse.URL
+
+	p := Project{
+		Name:     "New Name",
+		Active:   true,
+		ClientID: 12345,
+	}
+
+	err := a.CreateProject(&p, Defaults())
+	if err != nil {
+		t.Fatal(err)
+	}
+}

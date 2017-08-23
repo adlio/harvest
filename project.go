@@ -5,35 +5,39 @@ import (
 	"time"
 )
 
+type ProjectRequest struct {
+	Project *Project `json:"project"`
+}
+
 type ProjectResponse struct {
 	Project *Project `json:"project"`
 }
 
 type Project struct {
-	ID                               int64     `json:"id"`
-	ClientID                         int64     `json:"client_id"`
-	Name                             string    `json:"name"`
-	Code                             string    `json:"code"`
+	ID                               int64     `json:"id,omitempty"`
+	ClientID                         int64     `json:"client_id,omitempty"`
+	Name                             string    `json:"name,omitempty"`
+	Code                             string    `json:"code,omitempty"`
 	Active                           bool      `json:"active"`
 	Billable                         bool      `json:"billable"`
-	BillBy                           string    `json:"bill_by"`
-	HourlyRate                       *float64  `json:"hourly_rate"`
-	BudgetBy                         string    `json:"budget_by"`
-	Budget                           *float64  `json:"budget"`
+	BillBy                           string    `json:"bill_by,omitempty"`
+	HourlyRate                       *float64  `json:"hourly_rate,omitempty"`
+	BudgetBy                         string    `json:"budget_by,omitempty"`
+	Budget                           *float64  `json:"budget,omitempty"`
 	NotifyWhenOverBudget             bool      `json:"notify_when_over_budget"`
-	OverBudgetNotificationPercentage float64   `json:"over_budget_notification_percentage"`
-	OverBudgetNotifiedAt             *Date     `json:"over_budget_notified_at"`
+	OverBudgetNotificationPercentage float64   `json:"over_budget_notification_percentage,omitempty"`
+	OverBudgetNotifiedAt             *Date     `json:"over_budget_notified_at,omitempty"`
 	ShowBudgetToAll                  bool      `json:"show_budget_to_all"`
-	CreatedAt                        time.Time `json:"created_at"`
-	UpdatedAt                        time.Time `json:"updated_at"`
-	StartsOn                         Date      `json:"starts_on"`
-	EndsOn                           Date      `json:"ends_on"`
-	Estimate                         *float64  `json:"estimate"`
-	EstimateBy                       string    `json:"estimate_by"`
-	HintEarliestRecordAt             Date      `json:"hint_earliest_record_at"`
-	HintLatestRecordAt               Date      `json:"hint_latest_record_at"`
-	Notes                            string    `json:"notes"`
-	CostBudget                       *float64  `json:"cost_budget"`
+	CreatedAt                        time.Time `json:"created_at,omitempty"`
+	UpdatedAt                        time.Time `json:"updated_at,omitempty"`
+	StartsOn                         Date      `json:"starts_on,omitempty"`
+	EndsOn                           Date      `json:"ends_on,omitempty"`
+	Estimate                         *float64  `json:"estimate,omitempty"`
+	EstimateBy                       string    `json:"estimate_by,omitempty"`
+	HintEarliestRecordAt             Date      `json:"hint_earliest_record_at,omitempty"`
+	HintLatestRecordAt               Date      `json:"hint_latest_record_at,omitempty"`
+	Notes                            string    `json:"notes,omitempty"`
+	CostBudget                       *float64  `json:"cost_budget,omitempty"`
 	CostBudgetIncludeExpenses        bool      `json:"cost_budget_include_expenses"`
 }
 
@@ -53,4 +57,10 @@ func (a *API) GetProjects(args Arguments) (projects []*Project, err error) {
 		projects = append(projects, pr.Project)
 	}
 	return projects, err
+}
+
+func (a *API) CreateProject(p *Project, args Arguments) error {
+	projectRequest := ProjectRequest{Project: p}
+	response := ""
+	return a.Post("/projects", args, &projectRequest, &response)
 }
