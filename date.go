@@ -9,6 +9,10 @@ type Date struct {
 	time.Time
 }
 
+func (d *Date) Matches(t time.Time) bool {
+	return d.Format("2006-01-02") == t.Format("2006-01-02")
+}
+
 func (d *Date) MarshalJSON() ([]byte, error) {
 	if d == nil {
 		return []byte("null"), nil
