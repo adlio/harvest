@@ -1,6 +1,7 @@
 package harvest
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -58,6 +59,51 @@ func (a *API) Get(path string, args Arguments, target interface{}) error {
 	if err != nil {
 		body, _ := ioutil.ReadAll(resp.Body)
 		return errors.Wrapf(err, "JSON decode failed on %s: %s", url, string(body))
+	}
+
+	return nil
+}
+
+func (a *API) Post(path string, args Arguments, postData interface{}, target interface{}) error {
+	url := fmt.Sprintf("%s%s", a.BaseURL, path)
+	urlWithParams := fmt.Sprintf("%s?%s", url, args.ToURLValues().Encode())
+
+	buffer := new(bytes.Buffer)
+	if postData != nil {
+		json.NewEncoder(buffer).Encode(postData)
+		fmt.Printf("%v", buffer)
+	}
+
+	req, err := http.NewRequest("POST", urlWithParams, buffer)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
+	if a.User != "" && a.Password != "" {
+		req.SetBasicAuth(a.User, a.Password)
+	}
+	if err != nil {
+		return errors.Wrapf(err, "Invalid POST request %s", url)
+	}
+
+	resp, err := a.client.Do(req)
+	if err != nil {
+		return errors.Wrapf(err, "HTTP request failure on %s", url)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != 200 {
+		var body []byte
+		body, err = ioutil.ReadAll(resp.Body)
+		return errors.Wrapf(err, "HTTP request failure on %s: %s %s", url, string(body), err)
+	}
+
+	decoder := json.NewDecoder(resp.Body)
+	err = decoder.Decode(target)
+	if err != nil {
+		body, _ := ioutil.ReadAll(resp.Body)
+		if len(body) == 0 {
+			return nil
+		} else {
+			return errors.Wrapf(err, "JSON decode failed on %s: %s %s", url, string(body), err)
+		}
 	}
 
 	return nil
