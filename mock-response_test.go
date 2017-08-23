@@ -25,6 +25,24 @@ func mockResponse(paths ...string) *httptest.Server {
 	}))
 }
 
+func mockRedirectResponse(paths ...string) *httptest.Server {
+	parts := []string{".", "testdata"}
+	filename := filepath.Join(append(parts, paths...)...)
+
+	mockData, err := ioutil.ReadFile(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+		if r.Method == "POST" || r.Method == "PUT" {
+			rw.Header().Set("Location", "/redirect/123456")
+			rw.Write([]byte{})
+		} else {
+			rw.Write(mockData)
+		}
+	}))
+}
+
 func mockDynamicPathResponse() *httptest.Server {
 	return httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 
