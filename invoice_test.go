@@ -38,3 +38,18 @@ func TestGetInvoices(t *testing.T) {
 		t.Errorf("Incorrect invoice ID '%v'", invoices[0].ID)
 	}
 }
+
+func TestGetSinglePageOfInvoices(t *testing.T) {
+	a := testAPI()
+	a.BaseURL = mockDynamicPathResponse().URL
+	invoices, err := a.GetInvoices(Arguments{"page": "1"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(invoices) != 2 {
+		t.Errorf("Incorrect number of invoices. Expected 8, got %d", len(invoices))
+	}
+	if invoices[0].ID != 12286767 {
+		t.Errorf("Incorrect invoice ID '%v'", invoices[0].ID)
+	}
+}
