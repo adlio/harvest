@@ -479,7 +479,7 @@
           "billable": true
         }
       ],
-      "client": "NYRA - New York Racing Association",
+      "client": "Client 1",
       "client_id": 3954262,
       "client_currency": "United States Dollar - USD",
       "client_currency_symbol": "$"
@@ -526,7 +526,7 @@
           "billable": true
         }
       ],
-      "client": "NYRA - New York Racing Association",
+      "client": "Client 1",
       "client_id": 3954262,
       "client_currency": "United States Dollar - USD",
       "client_currency_symbol": "$"
@@ -573,7 +573,7 @@
           "billable": true
         }
       ],
-      "client": "NYRA - New York Racing Association",
+      "client": "Client 1",
       "client_id": 3954262,
       "client_currency": "United States Dollar - USD",
       "client_currency_symbol": "$"

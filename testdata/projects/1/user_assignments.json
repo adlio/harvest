@@ -1,0 +1,44 @@
+[
+  {
+    "user_assignment": {
+      "id": 1,
+      "user_id": 1,
+      "project_id": 1,
+      "is_project_manager": true,
+      "deactivated": false,
+      "hourly_rate": 250,
+      "budget": null,
+      "created_at": "2017-07-11T07:18:17Z",
+      "updated_at": "2017-07-11T07:18:17Z",
+      "estimate": null
+    }
+  },
+  {
+    "user_assignment": {
+      "id": 12,
+      "user_id": 2,
+      "project_id": 1,
+      "is_project_manager": true,
+      "deactivated": false,
+      "hourly_rate": 250,
+      "budget": null,
+      "created_at": "2017-07-11T07:18:17Z",
+      "updated_at": "2017-07-11T07:18:17Z",
+      "estimate": null
+    }
+  },
+  {
+    "user_assignment": {
+      "id": 13,
+      "user_id": 3,
+      "project_id": 1,
+      "is_project_manager": true,
+      "deactivated": false,
+      "hourly_rate": 250,
+      "budget": null,
+      "created_at": "2017-07-11T07:18:17Z",
+      "updated_at": "2017-07-11T07:18:17Z",
+      "estimate": null
+    }
+  }
+]
