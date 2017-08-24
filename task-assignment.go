@@ -5,6 +5,10 @@ import (
 	"time"
 )
 
+type TaskAssignmentRequest struct {
+	TaskAssignment *TaskAssignment `json:"task_assignment"`
+}
+
 type TaskAssignmentResponse struct {
 	TaskAssignment *TaskAssignment `json:"task_assignment"`
 }
@@ -37,4 +41,32 @@ func (a *API) GetTaskAssignment(projectID int64, taskAssignmentID int64, args Ar
 	path := fmt.Sprintf("/projects/%v/task_assignments/%v", projectID, taskAssignmentID)
 	err = a.Get(path, args, &taskAssignmentResponse)
 	return taskAssignmentResponse.TaskAssignment, err
+}
+
+func (a *API) CreateTaskAssignment(ta *TaskAssignment, args Arguments) error {
+	req := TaskAssignmentRequest{TaskAssignment: ta}
+	resp := TaskAssignmentResponse{TaskAssignment: ta}
+	path := fmt.Sprintf("/projects/%v/task_assignments", ta.ProjectID)
+	return a.Post(path, args, &req, &resp)
+}
+
+func (a *API) UpdateTaskAssignment(ta *TaskAssignment, args Arguments) error {
+	req := TaskAssignmentRequest{TaskAssignment: ta}
+	resp := TaskAssignmentResponse{TaskAssignment: ta}
+	path := fmt.Sprintf("/projects/%v/task_assignments/%v", ta.ProjectID, ta.ID)
+	return a.Put(path, args, &req, &resp)
+}
+
+func (a *API) DeleteTaskAssignment(ta *TaskAssignment, args Arguments) error {
+	path := fmt.Sprintf("/projects/%v/task_assignments/%v", ta.ProjectID, ta.ID)
+	return a.Delete(path, args)
+}
+
+func ContainsTaskID(taskID int64, tas []*TaskAssignment) bool {
+	for _, ta := range tas {
+		if ta.TaskID == taskID {
+			return true
+		}
+	}
+	return false
 }

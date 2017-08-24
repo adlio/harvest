@@ -33,3 +33,61 @@ func TestGetTaskAssignment(t *testing.T) {
 		t.Errorf("Incorrect task ID '%v'", taskassignment.TaskID)
 	}
 }
+
+func TestCreateTaskAssignment(t *testing.T) {
+	a := testAPI()
+	res := mockRedirectResponse("taskassignments", "task-assignment-example.json")
+	a.BaseURL = res.URL
+	ta := TaskAssignment{ID: 123456, ProjectID: 12345}
+	err := a.CreateTaskAssignment(&ta, Defaults())
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if ta.ID != 37453419 {
+		t.Errorf("Expected ID=%d, got ID=%d", 37453419, ta.ID)
+	}
+}
+
+func TestUpdateTaskAssignment(t *testing.T) {
+	a := testAPI()
+	res := mockRedirectResponse("taskassignments", "task-assignment-example.json")
+	a.BaseURL = res.URL
+	ta := TaskAssignment{ID: 12456, ProjectID: 12345}
+	err := a.UpdateTaskAssignment(&ta, Defaults())
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if ta.ID != 37453419 {
+		t.Errorf("Expected ID=%d, got ID=%d", 37453419, ta.ID)
+	}
+}
+
+func TestDeleteTaskAssignment(t *testing.T) {
+	a := testAPI()
+	err := a.DeleteTaskAssignment(&TaskAssignment{ID: 123456, ProjectID: 12345}, Defaults())
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestContainsTaskIDPresent(t *testing.T) {
+	ids := []*TaskAssignment{
+		&TaskAssignment{TaskID: 1},
+		&TaskAssignment{TaskID: 2},
+	}
+	if ContainsTaskID(1, ids) != true {
+		t.Errorf("ContainsTaskID should be true for 1 when ids contains TaskID: 1")
+	}
+}
+
+func TestContainsTaskIDMissing(t *testing.T) {
+	ids := []*TaskAssignment{
+		&TaskAssignment{TaskID: 1},
+		&TaskAssignment{TaskID: 2},
+	}
+	if ContainsTaskID(10, ids) != false {
+		t.Errorf("ContainsTaskID should be false for 10 when ids has no TaskID: 10")
+	}
+}
