@@ -5,6 +5,10 @@ import (
 	"time"
 )
 
+type UserAssignmentRequest struct {
+	UserAssignment *UserAssignment `json:"user_assignment"`
+}
+
 type UserAssignmentResponse struct {
 	UserAssignment *UserAssignment `json:"user_assignment"`
 }
@@ -36,4 +40,23 @@ func (a *API) GetUserAssignment(projectID int64, userAssignmentID int64, args Ar
 	path := fmt.Sprintf("/projects/%v/user_assignments/%v", projectID, userAssignmentID)
 	err = a.Get(path, args, &userAssignmentResponse)
 	return userAssignmentResponse.UserAssignment, err
+}
+
+func (a *API) CreateUserAssignment(ua *UserAssignment, args Arguments) error {
+	req := UserAssignmentRequest{UserAssignment: ua}
+	resp := UserAssignmentResponse{UserAssignment: ua}
+	path := fmt.Sprintf("/projects/%v/user_assignments", ua.ProjectID)
+	return a.Post(path, args, &req, &resp)
+}
+
+func (a *API) UpdateUserAssignment(ua *UserAssignment, args Arguments) error {
+	req := UserAssignmentRequest{UserAssignment: ua}
+	resp := UserAssignmentResponse{UserAssignment: ua}
+	path := fmt.Sprintf("/projects/%v/user_assignments/%v", ua.ProjectID, ua.ID)
+	return a.Put(path, args, &req, &resp)
+}
+
+func (a *API) DeleteUserAssignment(ua *UserAssignment, args Arguments) error {
+	path := fmt.Sprintf("/projects/%v/user_assignments/%v", ua.ProjectID, ua.ID)
+	return a.Delete(path, args)
 }

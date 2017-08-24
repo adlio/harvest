@@ -47,6 +47,25 @@ func TestCreateUpdateDeleteProject(t *testing.T) {
 			t.Fatal(err)
 		}
 
+		p2, err := api.GetProject(p.ID, Defaults())
+		if err != nil {
+			t.Fatal(err)
+		}
+		if p2.Notes != "These are the automatically-generated notes from the library." {
+			t.Errorf("UpdateProject() seemed to have failed to change the notes on Project %d", p2.ID)
+		}
+
+		// Delete all the UserAssignments.. this avoids a mass-email about the delete
+		// to all attached staff.
+		assignments, err := api.GetUserAssignments(p.ID, Defaults())
+		for i, ua := range assignments {
+			if i == 0 {
+				ua.IsProjectManager = true
+				api.UpdateUserAssignment(ua, Defaults())
+			}
+			api.DeleteUserAssignment(ua, Defaults())
+		}
+
 		err = api.DeleteProject(&p, Defaults())
 		if err != nil {
 			t.Fatal(err)
