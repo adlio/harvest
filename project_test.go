@@ -115,8 +115,8 @@ func TestGetProjectWithStartEndDates(t *testing.T) {
 
 func TestCreateProject(t *testing.T) {
 	a := testAPI()
-	emptyResponse := mockResponse("common/empty")
-	a.BaseURL = emptyResponse.URL
+	projectResponse := mockRedirectResponse("projects", "12670372.json")
+	a.BaseURL = projectResponse.URL
 
 	p := Project{
 		Name:     "New Name",
@@ -127,5 +127,30 @@ func TestCreateProject(t *testing.T) {
 	err := a.CreateProject(&p, Defaults())
 	if err != nil {
 		t.Fatal(err)
+	}
+
+	if *p.HourlyRate != 120.0 {
+		t.Errorf("Hourly rate should have been picked up in the CreateProject response")
+	}
+}
+
+func TestUpdateProject(t *testing.T) {
+	a := testAPI()
+	projectResponse := mockRedirectResponse("projects", "12670372.json")
+	a.BaseURL = projectResponse.URL
+
+	p := Project{
+		Name:     "New Name",
+		Active:   true,
+		ClientID: 12345,
+	}
+
+	err := a.UpdateProject(&p, Defaults())
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if *p.HourlyRate != 120.0 {
+		t.Errorf("Hourly rate should have been picked up in the CreateProject response")
 	}
 }

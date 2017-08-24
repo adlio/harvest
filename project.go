@@ -59,8 +59,26 @@ func (a *API) GetProjects(args Arguments) (projects []*Project, err error) {
 	return projects, err
 }
 
+func (a *API) SaveProject(p *Project, args Arguments) error {
+	if p.ID != 0 {
+		return a.UpdateProject(p, args)
+	} else {
+		return a.CreateProject(p, args)
+	}
+}
+
+func (a *API) UpdateProject(p *Project, args Arguments) error {
+	projectRequest := ProjectRequest{Project: p}
+	path := fmt.Sprintf("/projects/%d", p.ID)
+	return a.Put(path, args, &projectRequest, &projectRequest)
+}
+
 func (a *API) CreateProject(p *Project, args Arguments) error {
 	projectRequest := ProjectRequest{Project: p}
-	response := ""
-	return a.Post("/projects", args, &projectRequest, &response)
+	return a.Post("/projects", args, &projectRequest, &projectRequest)
+}
+
+func (a *API) DeleteProject(p *Project, args Arguments) error {
+	path := fmt.Sprintf("/projects/%d", p.ID)
+	return a.Delete(path, args)
 }
