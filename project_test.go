@@ -124,7 +124,7 @@ func TestCreateProject(t *testing.T) {
 		ClientID: 12345,
 	}
 
-	err := a.CreateProject(&p, Defaults())
+	err := a.SaveProject(&p, Defaults()) // Will call a.CreateProject()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -140,17 +140,41 @@ func TestUpdateProject(t *testing.T) {
 	a.BaseURL = projectResponse.URL
 
 	p := Project{
+		ID:       1234,
 		Name:     "New Name",
 		Active:   true,
 		ClientID: 12345,
 	}
 
-	err := a.UpdateProject(&p, Defaults())
+	err := a.SaveProject(&p, Defaults()) // Will call a.UpdateProject()
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	if *p.HourlyRate != 120.0 {
 		t.Errorf("Hourly rate should have been picked up in the CreateProject response")
+	}
+}
+
+func TestDuplicateProject(t *testing.T) {
+	a := testAPI()
+	res := mockDynamicPathResponse()
+	a.BaseURL = res.URL
+
+	project, err := a.DuplicateProject(1, "Experimental Name")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if project.ID != 2 {
+		t.Errorf("Expected new project with ID=%d, but got ID=%d", 2, project.ID)
+	}
+}
+
+func TestDeleteProject(t *testing.T) {
+	a := testAPI()
+	err := a.DeleteProject(&Project{ID: 1}, Defaults())
+	if err != nil {
+		t.Fatal(err)
 	}
 }

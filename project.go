@@ -42,10 +42,10 @@ type Project struct {
 }
 
 func (a *API) GetProject(projectID int64, args Arguments) (project *Project, err error) {
-	projectResponse := ProjectResponse{}
+	resp := ProjectResponse{}
 	path := fmt.Sprintf("/projects/%d", projectID)
-	err = a.Get(path, args, &projectResponse)
-	return projectResponse.Project, err
+	err = a.Get(path, args, &resp)
+	return resp.Project, err
 }
 
 func (a *API) GetProjects(args Arguments) (projects []*Project, err error) {
@@ -68,17 +68,48 @@ func (a *API) SaveProject(p *Project, args Arguments) error {
 }
 
 func (a *API) UpdateProject(p *Project, args Arguments) error {
-	projectRequest := ProjectRequest{Project: p}
+	req := ProjectRequest{Project: p}
 	path := fmt.Sprintf("/projects/%d", p.ID)
-	return a.Put(path, args, &projectRequest, &projectRequest)
+	return a.Put(path, args, &req, &req)
 }
 
 func (a *API) CreateProject(p *Project, args Arguments) error {
-	projectRequest := ProjectRequest{Project: p}
-	return a.Post("/projects", args, &projectRequest, &projectRequest)
+	req := ProjectRequest{Project: p}
+	resp := ProjectResponse{Project: p}
+	return a.Post("/projects", args, &req, &resp)
 }
 
 func (a *API) DeleteProject(p *Project, args Arguments) error {
 	path := fmt.Sprintf("/projects/%d", p.ID)
 	return a.Delete(path, args)
+}
+
+func (a *API) DuplicateProject(sourceProjectID int64, newName string) (*Project, error) {
+
+	var project *Project
+
+	project, err := a.GetProject(sourceProjectID, Defaults())
+	if err != nil {
+		return nil, err
+	}
+
+	project.ID = 0
+	project.Name = newName
+
+	err = a.CreateProject(project, Defaults())
+	if err != nil {
+		return nil, err
+	}
+
+	err = a.CopyTaskAssignments(project.ID, sourceProjectID)
+	if err != nil {
+		return nil, err
+	}
+
+	err = a.CopyUserAssignments(project.ID, sourceProjectID)
+	if err != nil {
+		return nil, err
+	}
+
+	return project, nil
 }
