@@ -6,14 +6,11 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"regexp"
 
 	"github.com/pkg/errors"
 )
 
 const HARVEST_DOMAIN = "harvestapp.com"
-
-var idRegexp = regexp.MustCompile("\\d+$")
 
 type API struct {
 	client    *http.Client
@@ -101,7 +98,7 @@ func (a *API) Put(path string, args Arguments, postData interface{}, target inte
 	// Harvest V1 API returns an empty response, with a Location header including the
 	// URI of the created object (e.g. /projects/254454)
 	redirectDestination := resp.Header.Get("Location")
-	if idStr := idRegexp.FindString(redirectDestination); idStr != "" {
+	if redirectDestination != "" {
 		return a.Get(redirectDestination, args, target)
 	} else {
 		return errors.Errorf("PUT to %s failed to return a Location header. This means we couldn't fetch the new state of the record.", url)
@@ -144,7 +141,7 @@ func (a *API) Post(path string, args Arguments, postData interface{}, target int
 	// Harvest V1 API returns an empty response, with a Location header including the
 	// URI of the created object (e.g. /projects/254454)
 	redirectDestination := resp.Header.Get("Location")
-	if idStr := idRegexp.FindString(redirectDestination); idStr != "" {
+	if redirectDestination != "" {
 		return a.Get(redirectDestination, args, target)
 	} else {
 		return errors.Errorf("POST to %s failed to return a Location header. This means we couldn't fetch the new state of the record.", url)
