@@ -62,6 +62,48 @@ func (a *API) DeleteTaskAssignment(ta *TaskAssignment, args Arguments) error {
 	return a.Delete(path, args)
 }
 
+func (a *API) CopyTaskAssignments(destProjectID int64, sourceProjectID int64) error {
+
+	sourceTAs, err := a.GetTaskAssignments(sourceProjectID, Defaults())
+	if err != nil {
+		return err
+	}
+
+	destTAs, err := a.GetTaskAssignments(destProjectID, Defaults())
+	if err != nil {
+		return err
+	}
+
+	// Remove incorrect TaskAssignments
+	for _, destTA := range destTAs {
+		if !ContainsTaskID(destTA.TaskID, sourceTAs) {
+			err = a.DeleteTaskAssignment(destTA, Defaults())
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	// Add missing TaskAssignments
+	for _, sourceTA := range sourceTAs {
+		if !ContainsTaskID(sourceTA.TaskID, destTAs) {
+			err = a.CreateTaskAssignment(&TaskAssignment{
+				ID:          0,
+				ProjectID:   destProjectID,
+				TaskID:      sourceTA.TaskID,
+				Billable:    sourceTA.Billable,
+				Deactivated: sourceTA.Deactivated,
+				Budget:      sourceTA.Budget,
+				HourlyRate:  sourceTA.HourlyRate,
+				Estimate:    sourceTA.Estimate,
+				CreatedAt:   time.Now(),
+				UpdatedAt:   time.Now(),
+			}, Defaults())
+		}
+	}
+	return nil
+}
+
 func ContainsTaskID(taskID int64, tas []*TaskAssignment) bool {
 	for _, ta := range tas {
 		if ta.TaskID == taskID {

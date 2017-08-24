@@ -72,6 +72,16 @@ func TestDeleteTaskAssignment(t *testing.T) {
 	}
 }
 
+func TestCopyTaskAssignments(t *testing.T) {
+	a := testAPI()
+	res := mockDynamicPathResponse()
+	a.BaseURL = res.URL
+	err := a.CopyTaskAssignments(1, 2)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestContainsTaskIDPresent(t *testing.T) {
 	ids := []*TaskAssignment{
 		&TaskAssignment{TaskID: 1},
