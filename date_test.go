@@ -15,6 +15,15 @@ func TestDateMarshallJSON(t *testing.T) {
 	if string(jsonBytes) != "\"2017-03-01\"" {
 		t.Errorf("Expected '\"2017-03-01\"'. Got '%s'", string(jsonBytes))
 	}
+
+	var dNull *Date
+	jsonBytes, err = dNull.MarshalJSON()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(jsonBytes) != "null" {
+		t.Errorf("Expected nil Date{} to marshal to JSON as 'null. Got '%s' instead.", string(jsonBytes))
+	}
 }
 
 func TestDateMatchesTrue(t *testing.T) {
