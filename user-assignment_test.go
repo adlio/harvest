@@ -33,3 +33,61 @@ func TestGetUserAssignment(t *testing.T) {
 		t.Errorf("Incorrect user ID '%v'", userassignment.UserID)
 	}
 }
+
+func TestCreateUserAssignment(t *testing.T) {
+	a := testAPI()
+	res := mockRedirectResponse("userassignments", "user-assignment-example.json")
+	a.BaseURL = res.URL
+	ta := UserAssignment{UserID: 123456, ProjectID: 12345}
+	err := a.CreateUserAssignment(&ta, Defaults())
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if ta.ID != 88888888 {
+		t.Errorf("Expected ID=%d, got ID=%d", 88888888, ta.ID)
+	}
+}
+
+func TestUpdateUserAssignment(t *testing.T) {
+	a := testAPI()
+	res := mockRedirectResponse("userassignments", "user-assignment-example.json")
+	a.BaseURL = res.URL
+	ta := UserAssignment{UserID: 12456, ProjectID: 12345}
+	err := a.UpdateUserAssignment(&ta, Defaults())
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if ta.ID != 88888888 {
+		t.Errorf("Expected ID=%d, got ID=%d", 88888888, ta.ID)
+	}
+}
+
+func TestDeleteUserAssignment(t *testing.T) {
+	a := testAPI()
+	err := a.DeleteUserAssignment(&UserAssignment{ID: 123456, ProjectID: 12345}, Defaults())
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestContainsUserIDPresent(t *testing.T) {
+	ids := []*UserAssignment{
+		&UserAssignment{UserID: 1},
+		&UserAssignment{UserID: 2},
+	}
+	if ContainsUserID(1, ids) != true {
+		t.Errorf("ContainsUserID should be true for 1 when ids contains UserID: 1")
+	}
+}
+
+func TestContainsUserIDMissing(t *testing.T) {
+	ids := []*UserAssignment{
+		&UserAssignment{UserID: 1},
+		&UserAssignment{UserID: 2},
+	}
+	if ContainsUserID(10, ids) != false {
+		t.Errorf("ContainsUserID should be false for 10 when ids has no UserID: 10")
+	}
+}

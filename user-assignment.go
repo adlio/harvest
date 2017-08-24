@@ -60,3 +60,12 @@ func (a *API) DeleteUserAssignment(ua *UserAssignment, args Arguments) error {
 	path := fmt.Sprintf("/projects/%v/user_assignments/%v", ua.ProjectID, ua.ID)
 	return a.Delete(path, args)
 }
+
+func ContainsUserID(userID int64, uas []*UserAssignment) bool {
+	for _, ua := range uas {
+		if ua.UserID == userID {
+			return true
+		}
+	}
+	return false
+}
