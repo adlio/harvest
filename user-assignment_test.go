@@ -72,6 +72,16 @@ func TestDeleteUserAssignment(t *testing.T) {
 	}
 }
 
+func TestCopyUserAssignments(t *testing.T) {
+	a := testAPI()
+	res := mockDynamicPathResponse()
+	a.BaseURL = res.URL
+	err := a.CopyUserAssignments(2, 1)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestContainsUserIDPresent(t *testing.T) {
 	ids := []*UserAssignment{
 		&UserAssignment{UserID: 1},

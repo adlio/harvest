@@ -61,6 +61,51 @@ func (a *API) DeleteUserAssignment(ua *UserAssignment, args Arguments) error {
 	return a.Delete(path, args)
 }
 
+func (a *API) CopyUserAssignments(destProjectID int64, sourceProjectID int64) error {
+
+	originalUAs, err := a.GetUserAssignments(sourceProjectID, Defaults())
+	if err != nil {
+		return err
+	}
+
+	newUAs, err := a.GetUserAssignments(destProjectID, Defaults())
+	if err != nil {
+		return err
+	}
+
+	// Remove incorrect UserAssignments
+	for _, newUA := range newUAs {
+		if !ContainsUserID(newUA.UserID, originalUAs) {
+			err = a.DeleteUserAssignment(newUA, Defaults())
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	// Add missing UserAssignments
+	for _, originalUA := range originalUAs {
+		if !ContainsUserID(originalUA.UserID, newUAs) {
+			err = a.CreateUserAssignment(&UserAssignment{
+				ID:               0,
+				ProjectID:        destProjectID,
+				UserID:           originalUA.UserID,
+				Deactivated:      originalUA.Deactivated,
+				HourlyRate:       originalUA.HourlyRate,
+				IsProjectManager: originalUA.IsProjectManager,
+				Estimate:         originalUA.Estimate,
+				UpdatedAt:        time.Now(),
+				CreatedAt:        time.Now(),
+			}, Defaults())
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 func ContainsUserID(userID int64, uas []*UserAssignment) bool {
 	for _, ua := range uas {
 		if ua.UserID == userID {
