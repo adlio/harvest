@@ -1,6 +1,6 @@
-[  
-    {  
-        "invoices":{  
+[
+    {
+        "invoices":{
             "id":12286767,
             "client_id":3781881,
             "period_start":null,
@@ -32,8 +32,8 @@
             "client_name":"Client 1"
         }
     },
-    {  
-        "invoices":{  
+    {
+        "invoices":{
             "id":12082229,
             "client_id":3936632,
             "period_start":null,
