@@ -5,6 +5,10 @@ import (
 	"time"
 )
 
+type UserAssignmentAddRequest struct {
+	User *User `json:"user"`
+}
+
 type UserAssignmentRequest struct {
 	UserAssignment *UserAssignment `json:"user_assignment"`
 }
@@ -22,7 +26,7 @@ type UserAssignment struct {
 	IsProjectManager bool      `json:"is_project_manager"`
 	CreatedAt        time.Time `json:"created_at"`
 	UpdatedAt        time.Time `json:"updated_at"`
-	Estimate         int64     `json:"estimate"`
+	Estimate         float64   `json:"estimate"`
 }
 
 func (a *API) GetUserAssignments(projectID int64, args Arguments) (userassignments []*UserAssignment, err error) {
@@ -43,10 +47,17 @@ func (a *API) GetUserAssignment(projectID int64, userAssignmentID int64, args Ar
 }
 
 func (a *API) CreateUserAssignment(ua *UserAssignment, args Arguments) error {
-	req := UserAssignmentRequest{UserAssignment: ua}
-	resp := UserAssignmentResponse{UserAssignment: ua}
+	returnedUA := UserAssignment{}
+	req := UserAssignmentAddRequest{User: &User{ID: ua.UserID}}
+	resp := UserAssignmentResponse{UserAssignment: &returnedUA}
 	path := fmt.Sprintf("/projects/%v/user_assignments", ua.ProjectID)
-	return a.Post(path, args, &req, &resp)
+	err := a.Post(path, args, &req, &resp)
+	if err != nil {
+		return err
+	}
+
+	ua.ID = returnedUA.ID
+	return a.UpdateUserAssignment(ua, args)
 }
 
 func (a *API) UpdateUserAssignment(ua *UserAssignment, args Arguments) error {
@@ -83,11 +94,10 @@ func (a *API) CopyUserAssignments(destProjectID int64, sourceProjectID int64) er
 		}
 	}
 
-	// Add missing UserAssignments
+	// Add missing UserAssignments, update existing ones
 	for _, originalUA := range originalUAs {
 		if !ContainsUserID(originalUA.UserID, newUAs) {
 			err = a.CreateUserAssignment(&UserAssignment{
-				ID:               0,
 				ProjectID:        destProjectID,
 				UserID:           originalUA.UserID,
 				Deactivated:      originalUA.Deactivated,
@@ -100,6 +110,19 @@ func (a *API) CopyUserAssignments(destProjectID int64, sourceProjectID int64) er
 			if err != nil {
 				return err
 			}
+		} else {
+			for _, newUA := range newUAs {
+				if newUA.UserID == originalUA.UserID && UserAssignmentAttributesDiffer(newUA, originalUA) {
+					newUA.Deactivated = originalUA.Deactivated
+					newUA.HourlyRate = originalUA.HourlyRate
+					newUA.IsProjectManager = originalUA.IsProjectManager
+					newUA.Estimate = originalUA.Estimate
+					err = a.UpdateUserAssignment(newUA, Defaults())
+					if err != nil {
+						return err
+					}
+				}
+			}
 		}
 	}
 
@@ -111,6 +134,22 @@ func ContainsUserID(userID int64, uas []*UserAssignment) bool {
 		if ua.UserID == userID {
 			return true
 		}
+	}
+	return false
+}
+
+func UserAssignmentAttributesDiffer(ua1, ua2 *UserAssignment) bool {
+	if ua1.Deactivated != ua2.Deactivated {
+		return true
+	}
+	if !HaveSameFloat64Value(ua1.HourlyRate, ua2.HourlyRate) {
+		return true
+	}
+	if ua1.IsProjectManager != ua2.IsProjectManager {
+		return true
+	}
+	if ua1.Estimate != ua2.Estimate {
+		return true
 	}
 	return false
 }
