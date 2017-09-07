@@ -5,6 +5,10 @@ import (
 	"time"
 )
 
+type TaskAssignmentAddRequest struct {
+	Task *Task `json:"task"`
+}
+
 type TaskAssignmentRequest struct {
 	TaskAssignment *TaskAssignment `json:"task_assignment"`
 }
@@ -14,7 +18,7 @@ type TaskAssignmentResponse struct {
 }
 
 type TaskAssignment struct {
-	ID          int64     `json:"id"`
+	ID          int64     `json:"id,omitempty"`
 	ProjectID   int64     `json:"project_id"`
 	TaskID      int64     `json:"task_id"`
 	Billable    bool      `json:"billable"`
@@ -44,10 +48,14 @@ func (a *API) GetTaskAssignment(projectID int64, taskAssignmentID int64, args Ar
 }
 
 func (a *API) CreateTaskAssignment(ta *TaskAssignment, args Arguments) error {
-	req := TaskAssignmentRequest{TaskAssignment: ta}
+	req := TaskAssignmentAddRequest{Task: &Task{ID: ta.TaskID}}
 	resp := TaskAssignmentResponse{TaskAssignment: ta}
 	path := fmt.Sprintf("/projects/%v/task_assignments", ta.ProjectID)
-	return a.Post(path, args, &req, &resp)
+	err := a.Post(path, args, &req, &resp)
+	if err != nil {
+		return err
+	}
+	return a.UpdateTaskAssignment(ta, args)
 }
 
 func (a *API) UpdateTaskAssignment(ta *TaskAssignment, args Arguments) error {
@@ -87,8 +95,7 @@ func (a *API) CopyTaskAssignments(destProjectID int64, sourceProjectID int64) er
 	// Add missing TaskAssignments
 	for _, sourceTA := range sourceTAs {
 		if !ContainsTaskID(sourceTA.TaskID, destTAs) {
-			err = a.CreateTaskAssignment(&TaskAssignment{
-				ID:          0,
+			ta := TaskAssignment{
 				ProjectID:   destProjectID,
 				TaskID:      sourceTA.TaskID,
 				Billable:    sourceTA.Billable,
@@ -98,7 +105,11 @@ func (a *API) CopyTaskAssignments(destProjectID int64, sourceProjectID int64) er
 				Estimate:    sourceTA.Estimate,
 				CreatedAt:   time.Now(),
 				UpdatedAt:   time.Now(),
-			}, Defaults())
+			}
+			err = a.CreateTaskAssignment(&ta, Defaults())
+			if err != nil {
+				return err
+			}
 		}
 	}
 	return nil
