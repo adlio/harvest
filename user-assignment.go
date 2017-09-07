@@ -14,7 +14,7 @@ type UserAssignmentResponse struct {
 }
 
 type UserAssignment struct {
-	ID               int64     `json:"id"`
+	ID               int64     `json:"id,omitempty"`
 	UserID           int64     `json:"user_id"`
 	ProjectID        int64     `json:"project_id"`
 	Deactivated      bool      `json:"deactivated"`
