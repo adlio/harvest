@@ -6,8 +6,14 @@ import (
 	"time"
 )
 
-type InvoiceResponse struct {
-	Invoice *Invoice `json:"invoices"`
+type InvoicesResponse struct {
+	Invoices     []*Invoice `json:"invoices"`
+	PerPage      int64      `json:"per_page"`
+	TotalPages   int64      `json:"total_pages"`
+	TotalEntries int64      `json:"total_entries"`
+	NextPage     *int64     `json:"next_page"`
+	PreviousPage *int64     `json:"previous_page"`
+	Page         int64      `json:"page"`
 }
 
 type Invoice struct {
@@ -43,15 +49,15 @@ type Invoice struct {
 }
 
 func (a *API) GetInvoice(invoiceID int64, args Arguments) (invoice *Invoice, err error) {
-	invoiceResponse := InvoiceResponse{}
+	invoice = &Invoice{}
 	path := fmt.Sprintf("/invoices/%d", invoiceID)
-	err = a.Get(path, args, &invoiceResponse)
-	return invoiceResponse.Invoice, err
+	err = a.Get(path, args, &invoice)
+	return invoice, err
 }
 
 func (a *API) GetInvoices(args Arguments) (invoices []*Invoice, err error) {
 	invoices = make([]*Invoice, 0)
-	invoicesResponse := make([]*InvoiceResponse, 0)
+	invoicesResponse := InvoicesResponse{}
 
 	path := fmt.Sprintf("/invoices")
 	singlePage := false
@@ -68,11 +74,11 @@ func (a *API) GetInvoices(args Arguments) (invoices []*Invoice, err error) {
 
 	args["page"] = fmt.Sprintf("%d", page)
 	err = a.Get(path, args, &invoicesResponse)
-	for _, ir := range invoicesResponse {
-		invoices = append(invoices, ir.Invoice)
+	for _, i := range invoicesResponse.Invoices {
+		invoices = append(invoices, i)
 	}
 
-	if !singlePage && len(invoicesResponse) > 0 {
+	if !singlePage && invoicesResponse.TotalPages > 1 {
 		page = 2
 		moreInvoices := true
 
@@ -81,14 +87,15 @@ func (a *API) GetInvoices(args Arguments) (invoices []*Invoice, err error) {
 
 			// Get the next page
 			args["page"] = fmt.Sprintf("%d", page)
+			invoicesResponse.Invoices = make([]*Invoice, 0)
 			err = a.Get(path, args, &invoicesResponse)
 			if err != nil {
 				return
 			}
 
-			if len(invoicesResponse) > 0 {
-				for _, ir := range invoicesResponse {
-					invoices = append(invoices, ir.Invoice)
+			if len(invoicesResponse.Invoices) > 0 {
+				for _, i := range invoicesResponse.Invoices {
+					invoices = append(invoices, i)
 				}
 			} else {
 				// Stop the loop

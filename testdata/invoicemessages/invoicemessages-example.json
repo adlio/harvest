@@ -1,6 +1,6 @@
-[
-  {
-    "message": {
+{
+  "invoice_messages": [
+    {
         "id": 12465017,
         "invoice_id": 6770075,
         "send_me_a_copy": false,
@@ -16,10 +16,8 @@
         "sent_from": "Harvest User",
         "send_reminder_on": null,
         "full_recipient_list": "\"Client Person\" <support@harvestapp.com>"
-    }
-  },
-  {
-    "message": {
+    },
+    {
         "id": 12465018,
         "invoice_id": 6770075,
         "send_me_a_copy": false,
@@ -36,5 +34,11 @@
         "send_reminder_on": null,
         "full_recipient_list": "\"Client Person\" <support@harvestapp.com>"
     }
-  }
-]
+  ],
+  "per_page": 100,
+  "total_pages": 1,
+  "total_entries": 2,
+  "next_page": null,
+  "previous_page": null,
+  "page": 1
+}

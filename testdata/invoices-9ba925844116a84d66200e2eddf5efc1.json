@@ -1,1 +1,9 @@
-[]
+{
+  "invoices": [],
+  "per_page": 100,
+  "total_pages": 2,
+  "total_entries": 8,
+  "next_page": null,
+  "previous_page": 2,
+  "page": 3
+}

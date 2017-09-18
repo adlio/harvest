@@ -34,8 +34,8 @@ func TestGetInvoices(t *testing.T) {
 	if len(invoices) != 8 {
 		t.Errorf("Incorrect number of invoices. Expected 8, got %d", len(invoices))
 	}
-	if invoices[0].ID != 7941658 {
-		t.Errorf("Incorrect invoice ID '%v'", invoices[0].ID)
+	if invoices[0].ID != 12286767 {
+		t.Errorf("Incorrect invoice ID '%v'. Expected 12286767", invoices[0].ID)
 	}
 }
 
