@@ -3,6 +3,7 @@ package harvest
 import (
 	"os"
 	"testing"
+	"time"
 )
 
 func TestRealWorldGetTasks(t *testing.T) {
@@ -71,7 +72,7 @@ func TestRealWorldGetProjects(t *testing.T) {
 	}
 
 	if len(uas) < 1 {
-		t.Errorf("Project %d %s didn't contain any user assignments.\n", project.ID, project.Name)
+		t.Errorf("Project %d %s didn't contain any user assignments.", project.ID, project.Name)
 	}
 
 	tas, err := api.GetTaskAssignments(project.ID, Defaults())
@@ -80,7 +81,23 @@ func TestRealWorldGetProjects(t *testing.T) {
 	}
 
 	if len(tas) < 1 {
-		t.Errorf("Project #%d %s didn't contain any task assignments.\n", project.ID, project.Name)
+		t.Errorf("Project #%d %s didn't contain any task assignments.", project.ID, project.Name)
+	}
+
+	_, err = api.GetTimeEntriesForProjectBetween(project.ID, time.Now().AddDate(-10, 0, 0), time.Now(), Defaults())
+	if err != nil {
+		t.Error(err)
+	}
+}
+
+func TestRealWorldGetTimeEntries(t *testing.T) {
+	api := realWorldTestAPI(t)
+	tes, err := api.GetTimeEntriesBetween(time.Now().AddDate(-10, 0, 0), time.Now(), Defaults())
+	if err != nil {
+		t.Error(err)
+	}
+	if len(tes) < 1 {
+		t.Error("GetTimeEntriesBetween() failed to find time entries in the last 10 years. Is this an empty Harvest account?")
 	}
 }
 
