@@ -5,12 +5,14 @@ import (
 	"time"
 )
 
-type ProjectRequest struct {
-	Project *Project `json:"project"`
-}
-
-type ProjectResponse struct {
-	Project *Project `json:"project"`
+type ProjectsResponse struct {
+	Projects     []*Project `json:"projects"`
+	PerPage      int64      `json:"per_page"`
+	TotalPages   int64      `json:"total_pages"`
+	TotalEntries int64      `json:"total_entries"`
+	NextPage     *int64     `json:"next_page"`
+	PreviousPage *int64     `json:"previous_page"`
+	Page         int64      `json:"page"`
 }
 
 type Project struct {
@@ -42,21 +44,17 @@ type Project struct {
 }
 
 func (a *API) GetProject(projectID int64, args Arguments) (project *Project, err error) {
-	resp := ProjectResponse{}
+	project = &Project{}
 	path := fmt.Sprintf("/projects/%d", projectID)
-	err = a.Get(path, args, &resp)
-	return resp.Project, err
+	err = a.Get(path, args, project)
+	return project, err
 }
 
 func (a *API) GetProjects(args Arguments) (projects []*Project, err error) {
-	projects = make([]*Project, 0)
-	projectsResponse := make([]*ProjectResponse, 0)
+	projectsResponse := ProjectsResponse{}
 	path := fmt.Sprintf("/projects")
 	err = a.Get(path, args, &projectsResponse)
-	for _, pr := range projectsResponse {
-		projects = append(projects, pr.Project)
-	}
-	return projects, err
+	return projectsResponse.Projects, err
 }
 
 func (a *API) SaveProject(p *Project, args Arguments) error {
@@ -68,15 +66,12 @@ func (a *API) SaveProject(p *Project, args Arguments) error {
 }
 
 func (a *API) UpdateProject(p *Project, args Arguments) error {
-	req := ProjectRequest{Project: p}
 	path := fmt.Sprintf("/projects/%d", p.ID)
-	return a.Put(path, args, &req, &req)
+	return a.Put(path, args, p, p)
 }
 
 func (a *API) CreateProject(p *Project, args Arguments) error {
-	req := ProjectRequest{Project: p}
-	resp := ProjectResponse{Project: p}
-	return a.Post("/projects", args, &req, &resp)
+	return a.Post("/projects", args, p, p)
 }
 
 func (a *API) DeleteProject(p *Project, args Arguments) error {
