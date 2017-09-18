@@ -5,8 +5,14 @@ import (
 	"time"
 )
 
-type UserResponse struct {
-	User *User `json:"user"`
+type UsersResponse struct {
+	Users        []*User `json:"users"`
+	PerPage      int64   `json:"per_page"`
+	TotalPages   int64   `json:"total_pages"`
+	TotalEntries int64   `json:"total_entries"`
+	NextPage     *int64  `json:"next_page"`
+	PreviousPage *int64  `json:"previous_page"`
+	Page         int64   `json:"page"`
 }
 
 type User struct {
@@ -32,18 +38,15 @@ type User struct {
 }
 
 func (a *API) GetUser(userID int64, args Arguments) (user *User, err error) {
-	userResponse := UserResponse{}
-	path := fmt.Sprintf("/people/%v", userID)
-	err = a.Get(path, args, &userResponse)
-	return userResponse.User, err
+	user = &User{}
+	path := fmt.Sprintf("/users/%v", userID)
+	err = a.Get(path, args, &user)
+	return user, err
 }
 
 func (a *API) GetUsers(args Arguments) (users []*User, err error) {
-	usersResponse := make([]*UserResponse, 0)
-	path := fmt.Sprintf("/people")
+	usersResponse := UsersResponse{}
+	path := fmt.Sprintf("/users")
 	err = a.Get(path, args, &usersResponse)
-	for _, ur := range usersResponse {
-		users = append(users, ur.User)
-	}
-	return users, err
+	return usersResponse.Users, err
 }
