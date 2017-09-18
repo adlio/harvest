@@ -5,10 +5,6 @@ import (
 	"time"
 )
 
-type ContactResponse struct {
-	Contact *Contact `json:"contact"`
-}
-
 type Contact struct {
 	ID          int64     `json:"id"`
 	ClientID    int64     `json:"client_id"`
@@ -24,28 +20,20 @@ type Contact struct {
 }
 
 func (a *API) GetContact(contactID int64, args Arguments) (contact *Contact, err error) {
-	contactResponse := ContactResponse{}
+	contact = &Contact{}
 	path := fmt.Sprintf("/contacts/%v", contactID)
-	err = a.Get(path, args, &contactResponse)
-	return contactResponse.Contact, err
+	err = a.Get(path, args, contact)
+	return contact, err
 }
 
 func (a *API) GetClientContacts(clientID int64, args Arguments) (contacts []*Contact, err error) {
-	contactsResponse := make([]*ContactResponse, 0)
 	path := fmt.Sprintf("/clients/%v/contacts", clientID)
-	err = a.Get(path, args, &contactsResponse)
-	for _, cr := range contactsResponse {
-		contacts = append(contacts, cr.Contact)
-	}
+	err = a.Get(path, args, &contacts)
 	return contacts, err
 }
 
 func (a *API) GetContacts(args Arguments) (contacts []*Contact, err error) {
-	contactsResponse := make([]*ContactResponse, 0)
 	path := fmt.Sprintf("/contacts")
-	err = a.Get(path, args, &contactsResponse)
-	for _, cr := range contactsResponse {
-		contacts = append(contacts, cr.Contact)
-	}
+	err = a.Get(path, args, &contacts)
 	return contacts, err
 }

@@ -1,15 +1,13 @@
 {
-    "contact": {
-        "id": 2937808,
-        "client_id": 1661738,
-        "first_name": "Client",
-        "last_name": "Contact",
-        "email": "customer@example.com",
-        "phone_office": "800-123-4567",
-        "phone_mobile": "800-123-4567",
-        "fax": "800-123-4567",
-        "title": "Mrs",
-        "created_at": "2013-08-12T15:30:14Z",
-        "updated_at": "2015-04-16T18:07:28Z"
-    }
+  "id": 2937808,
+  "client_id": 1661738,
+  "first_name": "Client",
+  "last_name": "Contact",
+  "email": "customer@example.com",
+  "phone_office": "800-123-4567",
+  "phone_mobile": "800-123-4567",
+  "fax": "800-123-4567",
+  "title": "Mrs",
+  "created_at": "2013-08-12T15:30:14Z",
+  "updated_at": "2015-04-16T18:07:28Z"
 }
