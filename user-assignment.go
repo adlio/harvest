@@ -5,12 +5,14 @@ import (
 	"time"
 )
 
-type UserAssignmentRequest struct {
-	UserAssignment *UserAssignment `json:"user_assignment"`
-}
-
-type UserAssignmentResponse struct {
-	UserAssignment *UserAssignment `json:"user_assignment"`
+type UserAssignmentsResponse struct {
+	UserAssignments []*UserAssignment `json:"user_assignments"`
+	PerPage         int64             `json:"per_page"`
+	TotalPages      int64             `json:"total_pages"`
+	TotalEntries    int64             `json:"total_entries"`
+	NextPage        *int64            `json:"next_page"`
+	PreviousPage    *int64            `json:"previous_page"`
+	Page            int64             `json:"page"`
 }
 
 type UserAssignment struct {
@@ -25,35 +27,28 @@ type UserAssignment struct {
 	Estimate         int64     `json:"estimate"`
 }
 
-func (a *API) GetUserAssignments(projectID int64, args Arguments) (userassignments []*UserAssignment, err error) {
-	userAssignmentsResponse := make([]*UserAssignmentResponse, 0)
+func (a *API) GetUserAssignments(projectID int64, args Arguments) (userAssignments []*UserAssignment, err error) {
+	userAssignmentsResponse := UserAssignmentsResponse{}
 	path := fmt.Sprintf("/projects/%v/user_assignments", projectID)
 	err = a.Get(path, args, &userAssignmentsResponse)
-	for _, ua := range userAssignmentsResponse {
-		userassignments = append(userassignments, ua.UserAssignment)
-	}
-	return userassignments, err
+	return userAssignmentsResponse.UserAssignments, err
 }
 
-func (a *API) GetUserAssignment(projectID int64, userAssignmentID int64, args Arguments) (userassignment *UserAssignment, err error) {
-	userAssignmentResponse := UserAssignmentResponse{}
+func (a *API) GetUserAssignment(projectID int64, userAssignmentID int64, args Arguments) (userAssignment *UserAssignment, err error) {
+	userAssignment = &UserAssignment{}
 	path := fmt.Sprintf("/projects/%v/user_assignments/%v", projectID, userAssignmentID)
-	err = a.Get(path, args, &userAssignmentResponse)
-	return userAssignmentResponse.UserAssignment, err
+	err = a.Get(path, args, userAssignment)
+	return userAssignment, err
 }
 
 func (a *API) CreateUserAssignment(ua *UserAssignment, args Arguments) error {
-	req := UserAssignmentRequest{UserAssignment: ua}
-	resp := UserAssignmentResponse{UserAssignment: ua}
 	path := fmt.Sprintf("/projects/%v/user_assignments", ua.ProjectID)
-	return a.Post(path, args, &req, &resp)
+	return a.Post(path, args, ua, ua)
 }
 
 func (a *API) UpdateUserAssignment(ua *UserAssignment, args Arguments) error {
-	req := UserAssignmentRequest{UserAssignment: ua}
-	resp := UserAssignmentResponse{UserAssignment: ua}
 	path := fmt.Sprintf("/projects/%v/user_assignments/%v", ua.ProjectID, ua.ID)
-	return a.Put(path, args, &req, &resp)
+	return a.Put(path, args, &ua, &ua)
 }
 
 func (a *API) DeleteUserAssignment(ua *UserAssignment, args Arguments) error {

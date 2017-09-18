@@ -5,12 +5,15 @@ import (
 	"time"
 )
 
-type TaskAssignmentRequest struct {
-	TaskAssignment *TaskAssignment `json:"task_assignment"`
-}
+type TaskAssignmentsResponse struct {
+	TaskAssignments []*TaskAssignment `json:"task_assignments"`
 
-type TaskAssignmentResponse struct {
-	TaskAssignment *TaskAssignment `json:"task_assignment"`
+	PerPage      int64  `json:"per_page"`
+	TotalPages   int64  `json:"total_pages"`
+	TotalEntries int64  `json:"total_entries"`
+	NextPage     *int64 `json:"next_page"`
+	PreviousPage *int64 `json:"previous_page"`
+	Page         int64  `json:"page"`
 }
 
 type TaskAssignment struct {
@@ -26,35 +29,28 @@ type TaskAssignment struct {
 	CreatedAt   time.Time `json:"created_at"`
 }
 
-func (a *API) GetTaskAssignments(projectID int64, args Arguments) (taskassignments []*TaskAssignment, err error) {
-	taskAssignmentsResponse := make([]*TaskAssignmentResponse, 0)
+func (a *API) GetTaskAssignments(projectID int64, args Arguments) (taskAssignments []*TaskAssignment, err error) {
+	taskAssignmentsResponse := TaskAssignmentsResponse{}
 	path := fmt.Sprintf("/projects/%v/task_assignments", projectID)
 	err = a.Get(path, args, &taskAssignmentsResponse)
-	for _, ta := range taskAssignmentsResponse {
-		taskassignments = append(taskassignments, ta.TaskAssignment)
-	}
-	return taskassignments, err
+	return taskAssignmentsResponse.TaskAssignments, err
 }
 
-func (a *API) GetTaskAssignment(projectID int64, taskAssignmentID int64, args Arguments) (taskassignment *TaskAssignment, err error) {
-	taskAssignmentResponse := TaskAssignmentResponse{}
+func (a *API) GetTaskAssignment(projectID int64, taskAssignmentID int64, args Arguments) (taskAssignment *TaskAssignment, err error) {
+	taskAssignment = &TaskAssignment{}
 	path := fmt.Sprintf("/projects/%v/task_assignments/%v", projectID, taskAssignmentID)
-	err = a.Get(path, args, &taskAssignmentResponse)
-	return taskAssignmentResponse.TaskAssignment, err
+	err = a.Get(path, args, taskAssignment)
+	return taskAssignment, err
 }
 
 func (a *API) CreateTaskAssignment(ta *TaskAssignment, args Arguments) error {
-	req := TaskAssignmentRequest{TaskAssignment: ta}
-	resp := TaskAssignmentResponse{TaskAssignment: ta}
 	path := fmt.Sprintf("/projects/%v/task_assignments", ta.ProjectID)
-	return a.Post(path, args, &req, &resp)
+	return a.Post(path, args, ta, ta)
 }
 
 func (a *API) UpdateTaskAssignment(ta *TaskAssignment, args Arguments) error {
-	req := TaskAssignmentRequest{TaskAssignment: ta}
-	resp := TaskAssignmentResponse{TaskAssignment: ta}
 	path := fmt.Sprintf("/projects/%v/task_assignments/%v", ta.ProjectID, ta.ID)
-	return a.Put(path, args, &req, &resp)
+	return a.Put(path, args, ta, ta)
 }
 
 func (a *API) DeleteTaskAssignment(ta *TaskAssignment, args Arguments) error {
