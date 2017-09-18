@@ -5,8 +5,8 @@ import (
 	"time"
 )
 
-type TaskResponse struct {
-	Task *Task `json:"task"`
+type TasksResponse struct {
+	Tasks []*Task `json:"tasks"`
 }
 
 type Task struct {
@@ -21,18 +21,15 @@ type Task struct {
 }
 
 func (a *API) GetTask(taskID int64, args Arguments) (task *Task, err error) {
-	taskResponse := TaskResponse{}
+	task = &Task{}
 	path := fmt.Sprintf("/tasks/%v", taskID)
-	err = a.Get(path, args, &taskResponse)
-	return taskResponse.Task, err
+	err = a.Get(path, args, task)
+	return task, err
 }
 
 func (a *API) GetTasks(args Arguments) (tasks []*Task, err error) {
-	tasksResponse := make([]*TaskResponse, 0)
+	tasksResponse := TasksResponse{}
 	path := fmt.Sprintf("/tasks")
 	err = a.Get(path, args, &tasksResponse)
-	for _, tr := range tasksResponse {
-		tasks = append(tasks, tr.Task)
-	}
-	return tasks, err
+	return tasksResponse.Tasks, err
 }
