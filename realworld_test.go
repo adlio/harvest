@@ -3,9 +3,185 @@ package harvest
 import (
 	"os"
 	"testing"
-	"time"
 )
 
+func TestRealWorldGetTasks(t *testing.T) {
+	api := realWorldTestAPI(t)
+
+	tasks, err := api.GetTasks(Defaults())
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(tasks) < 1 {
+		t.Error("GetTasks() returned no tasks. Are you testing with an empty Harvest account?")
+	}
+
+	task, err := api.GetTask(tasks[0].ID, Defaults())
+	if err != nil {
+		t.Error(err)
+	}
+	if task.Name == "" {
+		t.Error("Task name was blank")
+	}
+}
+
+func TestRealWorldGetClients(t *testing.T) {
+	api := realWorldTestAPI(t)
+
+	clients, err := api.GetClients(Defaults())
+	if err != nil {
+		t.Error(err)
+	}
+	if len(clients) < 1 {
+		t.Error("GetClients() returned no clients. Are you testing with an empty Harvest account?")
+	}
+
+	client, err := api.GetClient(clients[0].ID, Defaults())
+	if err != nil {
+		t.Error(err)
+	}
+	if client.Name == "" {
+		t.Error("Client name was blank")
+	}
+}
+
+func TestRealWorldGetProjects(t *testing.T) {
+	api := realWorldTestAPI(t)
+
+	projects, err := api.GetProjects(Defaults())
+	if err != nil {
+		t.Error(err)
+	}
+	if len(projects) < 1 {
+		t.Error("GetProjects() returned no projects. Are you testing with an empty Harvest account?")
+	}
+
+	project, err := api.GetProject(projects[0].ID, Defaults())
+	if err != nil {
+		t.Error(err)
+	}
+	if project.Name == "" {
+		t.Error("Project name was blank")
+	}
+
+	uas, err := api.GetUserAssignments(project.ID, Defaults())
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(uas) < 1 {
+		t.Errorf("Project %d %s didn't contain any user assignments.\n", project.ID, project.Name)
+	}
+
+	tas, err := api.GetTaskAssignments(project.ID, Defaults())
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(tas) < 1 {
+		t.Errorf("Project #%d %s didn't contain any task assignments.\n", project.ID, project.Name)
+	}
+}
+
+func TestRealWorldGetExpenses(t *testing.T) {
+	api := realWorldTestAPI(t)
+
+	expenses, err := api.GetExpenses(Defaults())
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(expenses) < 1 {
+		t.Error("GetExpenses() returned no expenses. Are you testing with an empty Harvest account?")
+	}
+
+	expense, err := api.GetExpense(expenses[0].ID, Defaults())
+	if err != nil {
+		t.Error(err)
+	}
+	if expense.TotalCost == 0 {
+		t.Error("Got an expense with no TotalCost.")
+	}
+}
+
+func TestRealWorldGetExpenseCategories(t *testing.T) {
+	api := realWorldTestAPI(t)
+
+	categories, err := api.GetExpenseCategories(Defaults())
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(categories) < 1 {
+		t.Error("GetExpenseCategories() returned no categories. Are you testing with an empty Harvest account?")
+	}
+
+	category, err := api.GetExpenseCategory(categories[0].ID, Defaults())
+	if err != nil {
+		t.Error(err)
+	}
+
+	if category.Name == "" {
+		t.Error("Category didn't have a name")
+	}
+}
+
+func TestRealWorldGetInvoices(t *testing.T) {
+	api := realWorldTestAPI(t)
+
+	invoices, err := api.GetInvoices(Defaults())
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(invoices) < 1 {
+		t.Error("GetInvoices() returned no invoices. Are you testing with an empty Harvest account?")
+	}
+
+	invoice, err := api.GetInvoice(invoices[0].ID, Defaults())
+	if err != nil {
+		t.Error(err)
+	}
+
+	if invoice.Amount <= 0 {
+		t.Error("Invoice should have an amount.")
+	}
+
+	messages, err := api.GetInvoiceMessages(invoice.ID, Defaults())
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(messages) < 1 {
+		t.Skipf("Invoice %d had no messages, which might signal a problem, or that it doesn't have any messages.")
+	}
+
+}
+
+func TestRealWorldGetUsers(t *testing.T) {
+	api := realWorldTestAPI(t)
+
+	users, err := api.GetUsers(Defaults())
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(users) < 1 {
+		t.Error("GetUsers() returned no users. Are you testing with an empty Harvest account?")
+	}
+
+	user, err := api.GetUser(users[0].ID, Defaults())
+	if err != nil {
+		t.Error(err)
+	}
+
+	if user.FirstName == "" {
+		t.Error("User FirstName was blank")
+	}
+}
+
+/*
 func TestCreateUpdateDeleteProject(t *testing.T) {
 	api := realWorldTestAPI(t)
 
@@ -67,18 +243,18 @@ func TestCreateUpdateDeleteProject(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+*/
 
 func realWorldTestAPI(t *testing.T) *API {
 	realworld := os.Getenv("HARVEST_REALWORLD")
 
-	account := os.Getenv("HARVEST_ID")
-	username := os.Getenv("HARVEST_USER")
-	password := os.Getenv("HARVEST_PASS")
+	account := os.Getenv("HARVEST_ACCOUNT_ID")
+	token := os.Getenv("HARVEST_TOKEN")
 
-	if realworld == "true" && account != "" && username != "" && password != "" {
-		return NewBasicAuthAPI(account, username, password)
+	if realworld == "true" && account != "" && token != "" {
+		return NewTokenAPI(account, token)
 	} else {
-		t.Skipf("Skipping realworld tests because HARVEST_REALWORLD != true or HARVEST_ID, HARVEST_USER, HARVEST_PASS not supplied as environment variables.")
+		t.Skipf("Skipping realworld tests because HARVEST_REALWORLD != true or HARVEST_ACCOUNT_ID / HARVEST_TOKEN not supplied as environment variables.")
 		return nil
 	}
 }
