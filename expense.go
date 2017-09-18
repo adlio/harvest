@@ -5,8 +5,14 @@ import (
 	"time"
 )
 
-type ExpenseResponse struct {
-	Expense *Expense `json:"expense"`
+type ExpensesResponse struct {
+	Expenses     []*Expense `json:"expenses"`
+	PerPage      int64      `json:"per_page"`
+	TotalPages   int64      `json:"total_pages"`
+	TotalEntries int64      `json:"total_entries"`
+	NextPage     *int64     `json:"next_page"`
+	PreviousPage *int64     `json:"previous_page"`
+	Page         int64      `json:"page"`
 }
 
 type Expense struct {
@@ -31,18 +37,15 @@ type Expense struct {
 }
 
 func (a *API) GetExpense(expenseID int64, args Arguments) (expense *Expense, err error) {
-	expenseResponse := ExpenseResponse{}
+	expense = &Expense{}
 	path := fmt.Sprintf("/expenses/%v", expenseID)
-	err = a.Get(path, args, &expenseResponse)
-	return expenseResponse.Expense, err
+	err = a.Get(path, args, expense)
+	return expense, err
 }
 
 func (a *API) GetExpenses(args Arguments) (expenses []*Expense, err error) {
-	expensesResponse := make([]*ExpenseResponse, 0)
+	expensesResponse := ExpensesResponse{}
 	path := fmt.Sprintf("/expenses")
 	err = a.Get(path, args, &expensesResponse)
-	for _, er := range expensesResponse {
-		expenses = append(expenses, er.Expense)
-	}
-	return expenses, err
+	return expensesResponse.Expenses, err
 }

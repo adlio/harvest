@@ -1,46 +1,44 @@
-[
-  {
-    "expense": {
-        "id": 7631396,
-        "total_cost": 14,
-        "units": 14,
-        "created_at": "2015-04-21T14:20:34Z",
-        "updated_at": "2015-04-21T14:34:27Z",
-        "project_id": 3554414,
-        "expense_category_id": 1338061,
-        "user_id": 508343,
-        "spent_at": "2015-04-17",
-        "is_closed": false,
-        "notes": "Your Updated Expense",
-        "invoice_id": 0,
-        "billable": false,
-        "company_id": 210377,
-        "has_receipt": false,
-        "receipt_url": "",
-        "is_locked": false,
-        "locked_reason": null
+{
+  "expenses": [
+    {
+      "id": 7631396,
+      "total_cost": 14,
+      "units": 14,
+      "created_at": "2015-04-21T14:20:34Z",
+      "updated_at": "2015-04-21T14:34:27Z",
+      "project_id": 3554414,
+      "expense_category_id": 1338061,
+      "user_id": 508343,
+      "spent_at": "2015-04-17",
+      "is_closed": false,
+      "notes": "Your Updated Expense",
+      "invoice_id": 0,
+      "billable": false,
+      "company_id": 210377,
+      "has_receipt": false,
+      "receipt_url": "",
+      "is_locked": false,
+      "locked_reason": null
+    },
+    {
+      "id": 7631396,
+      "total_cost": 14,
+      "units": 14,
+      "created_at": "2015-04-21T14:20:34Z",
+      "updated_at": "2015-04-21T14:34:27Z",
+      "project_id": 3554414,
+      "expense_category_id": 1338061,
+      "user_id": 508343,
+      "spent_at": "2015-04-17",
+      "is_closed": false,
+      "notes": "Your Updated Expense",
+      "invoice_id": 0,
+      "billable": false,
+      "company_id": 210377,
+      "has_receipt": false,
+      "receipt_url": "",
+      "is_locked": false,
+      "locked_reason": null
     }
-  },
-  {
-    "expense": {
-        "id": 7631396,
-        "total_cost": 14,
-        "units": 14,
-        "created_at": "2015-04-21T14:20:34Z",
-        "updated_at": "2015-04-21T14:34:27Z",
-        "project_id": 3554414,
-        "expense_category_id": 1338061,
-        "user_id": 508343,
-        "spent_at": "2015-04-17",
-        "is_closed": false,
-        "notes": "Your Updated Expense",
-        "invoice_id": 0,
-        "billable": false,
-        "company_id": 210377,
-        "has_receipt": false,
-        "receipt_url": "",
-        "is_locked": false,
-        "locked_reason": null
-    }
-  }
-]
+  ]
+}
