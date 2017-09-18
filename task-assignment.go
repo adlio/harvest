@@ -17,7 +17,7 @@ type TaskAssignmentsResponse struct {
 }
 
 type TaskAssignment struct {
-	ID          int64     `json:"id"`
+	ID          int64     `json:"id,omitempty"`
 	ProjectID   int64     `json:"project_id"`
 	TaskID      int64     `json:"task_id"`
 	Billable    bool      `json:"billable"`
@@ -80,11 +80,10 @@ func (a *API) CopyTaskAssignments(destProjectID int64, sourceProjectID int64) er
 		}
 	}
 
-	// Add missing TaskAssignments
+	// Add missing TaskAssignments, update existing ones
 	for _, sourceTA := range sourceTAs {
 		if !ContainsTaskID(sourceTA.TaskID, destTAs) {
-			err = a.CreateTaskAssignment(&TaskAssignment{
-				ID:          0,
+			ta := TaskAssignment{
 				ProjectID:   destProjectID,
 				TaskID:      sourceTA.TaskID,
 				Billable:    sourceTA.Billable,
@@ -94,7 +93,25 @@ func (a *API) CopyTaskAssignments(destProjectID int64, sourceProjectID int64) er
 				Estimate:    sourceTA.Estimate,
 				CreatedAt:   time.Now(),
 				UpdatedAt:   time.Now(),
-			}, Defaults())
+			}
+			err = a.CreateTaskAssignment(&ta, Defaults())
+			if err != nil {
+				return err
+			}
+		} else {
+			for _, newTA := range destTAs {
+				if newTA.TaskID == sourceTA.TaskID && TaskAssignmentAttributesDiffer(newTA, sourceTA) {
+					newTA.Billable = sourceTA.Billable
+					newTA.Deactivated = sourceTA.Deactivated
+					newTA.Budget = sourceTA.Budget
+					newTA.HourlyRate = sourceTA.HourlyRate
+					newTA.Estimate = sourceTA.Estimate
+					err = a.UpdateTaskAssignment(newTA, Defaults())
+					if err != nil {
+						return err
+					}
+				}
+			}
 		}
 	}
 	return nil
@@ -105,6 +122,25 @@ func ContainsTaskID(taskID int64, tas []*TaskAssignment) bool {
 		if ta.TaskID == taskID {
 			return true
 		}
+	}
+	return false
+}
+
+func TaskAssignmentAttributesDiffer(ta1, ta2 *TaskAssignment) bool {
+	if ta1.Billable != ta2.Billable {
+		return true
+	}
+	if ta1.Deactivated != ta2.Deactivated {
+		return true
+	}
+	if !HaveSameFloat64Value(ta1.Budget, ta2.Budget) {
+		return true
+	}
+	if !HaveSameFloat64Value(ta1.HourlyRate, ta2.HourlyRate) {
+		return true
+	}
+	if !HaveSameFloat64Value(ta1.Estimate, ta2.Estimate) {
+		return true
 	}
 	return false
 }

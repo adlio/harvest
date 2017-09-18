@@ -96,7 +96,12 @@ func (a *API) Put(path string, args Arguments, postData interface{}, target inte
 	if redirectDestination != "" {
 		return a.Get(redirectDestination, args, target)
 	} else {
-		return errors.Errorf("PUT to %s failed to return a Location header. This means we couldn't fetch the new state of the record.", url)
+		decoder := json.NewDecoder(resp.Body)
+		err = decoder.Decode(target)
+		if err != nil {
+			body, _ := ioutil.ReadAll(resp.Body)
+			return errors.Wrapf(err, "JSON decode failed on %s: %s", url, string(body))
+		}
 	}
 
 	return nil

@@ -16,7 +16,7 @@ type UserAssignmentsResponse struct {
 }
 
 type UserAssignment struct {
-	ID               int64     `json:"id"`
+	ID               int64     `json:"id,omitempty"`
 	UserID           int64     `json:"user_id"`
 	ProjectID        int64     `json:"project_id"`
 	Deactivated      bool      `json:"deactivated"`
@@ -24,7 +24,7 @@ type UserAssignment struct {
 	IsProjectManager bool      `json:"is_project_manager"`
 	CreatedAt        time.Time `json:"created_at"`
 	UpdatedAt        time.Time `json:"updated_at"`
-	Estimate         int64     `json:"estimate"`
+	Estimate         float64   `json:"estimate"`
 }
 
 func (a *API) GetUserAssignments(projectID int64, args Arguments) (userAssignments []*UserAssignment, err error) {
@@ -78,11 +78,10 @@ func (a *API) CopyUserAssignments(destProjectID int64, sourceProjectID int64) er
 		}
 	}
 
-	// Add missing UserAssignments
+	// Add missing UserAssignments, update existing ones
 	for _, originalUA := range originalUAs {
 		if !ContainsUserID(originalUA.UserID, newUAs) {
 			err = a.CreateUserAssignment(&UserAssignment{
-				ID:               0,
 				ProjectID:        destProjectID,
 				UserID:           originalUA.UserID,
 				Deactivated:      originalUA.Deactivated,
@@ -95,6 +94,19 @@ func (a *API) CopyUserAssignments(destProjectID int64, sourceProjectID int64) er
 			if err != nil {
 				return err
 			}
+		} else {
+			for _, newUA := range newUAs {
+				if newUA.UserID == originalUA.UserID && UserAssignmentAttributesDiffer(newUA, originalUA) {
+					newUA.Deactivated = originalUA.Deactivated
+					newUA.HourlyRate = originalUA.HourlyRate
+					newUA.IsProjectManager = originalUA.IsProjectManager
+					newUA.Estimate = originalUA.Estimate
+					err = a.UpdateUserAssignment(newUA, Defaults())
+					if err != nil {
+						return err
+					}
+				}
+			}
 		}
 	}
 
@@ -106,6 +118,22 @@ func ContainsUserID(userID int64, uas []*UserAssignment) bool {
 		if ua.UserID == userID {
 			return true
 		}
+	}
+	return false
+}
+
+func UserAssignmentAttributesDiffer(ua1, ua2 *UserAssignment) bool {
+	if ua1.Deactivated != ua2.Deactivated {
+		return true
+	}
+	if !HaveSameFloat64Value(ua1.HourlyRate, ua2.HourlyRate) {
+		return true
+	}
+	if ua1.IsProjectManager != ua2.IsProjectManager {
+		return true
+	}
+	if ua1.Estimate != ua2.Estimate {
+		return true
 	}
 	return false
 }
