@@ -1,6 +1,6 @@
-[
-  {
-    "client": {
+{
+  "clients": [
+    {
         "id": 3398386,
         "name": "Your Account",
         "active": true,
@@ -13,10 +13,8 @@
         "details": "123 Main St\r\nAnytown, NY 12345",
         "default_invoice_timeframe": null,
         "last_invoice_kind": null
-    }
-  },
-  {
-    "client": {
+    },
+    {
         "id": 3398386,
         "name": "Another Account",
         "active": true,
@@ -30,5 +28,5 @@
         "default_invoice_timeframe": null,
         "last_invoice_kind": null
     }
-  }
-]
+  ]
+}

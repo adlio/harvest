@@ -5,8 +5,14 @@ import (
 	"time"
 )
 
-type ClientResponse struct {
-	Client *Client `json:"client"`
+type ClientsResponse struct {
+	Clients      []*Client `json:"clients"`
+	PerPage      int64     `json:"per_page"`
+	TotalPages   int64     `json:"total_pages"`
+	TotalEntries int64     `json:"total_entries"`
+	NextPage     *int64    `json:"next_page"`
+	PreviousPage *int64    `json:"previous_page"`
+	Page         int64     `json:"page"`
 }
 
 type Client struct {
@@ -25,18 +31,15 @@ type Client struct {
 }
 
 func (a *API) GetClient(clientID int64, args Arguments) (client *Client, err error) {
-	clientResponse := ClientResponse{}
+	c := Client{}
 	path := fmt.Sprintf("/clients/%v", clientID)
-	err = a.Get(path, args, &clientResponse)
-	return clientResponse.Client, err
+	err = a.Get(path, args, &c)
+	return &c, err
 }
 
 func (a *API) GetClients(args Arguments) (clients []*Client, err error) {
-	clientsResponse := make([]*ClientResponse, 0)
+	clientsResponse := ClientsResponse{}
 	path := fmt.Sprintf("/clients")
 	err = a.Get(path, args, &clientsResponse)
-	for _, cr := range clientsResponse {
-		clients = append(clients, cr.Client)
-	}
-	return clients, err
+	return clientsResponse.Clients, err
 }
