@@ -10,23 +10,25 @@ import (
 	"github.com/pkg/errors"
 )
 
-const HARVEST_DOMAIN = "harvestapp.com"
+const CLIENT_VERSION = "1.0"
+const HARVEST_DOMAIN = "api.harvestapp.com"
+const HARVEST_API_VERSION = "v2"
 
 type API struct {
-	client    *http.Client
-	BaseURL   string
-	SubDomain string
-	User      string
-	Password  string
+	client       *http.Client
+	BaseURL      string
+	AccountID    string
+	AccessToken  string
+	RefreshToken string
+	UserAgent    string
 }
 
-func NewBasicAuthAPI(subdomain, user, password string) *API {
+func NewTokenAPI(accountID string, accessToken string) *API {
 	a := API{}
 	a.client = http.DefaultClient
-	a.SubDomain = subdomain
-	a.User = user
-	a.Password = password
-	a.BaseURL = fmt.Sprintf("https://%s.%s", subdomain, HARVEST_DOMAIN)
+	a.BaseURL = "https://" + HARVEST_DOMAIN + "/" + HARVEST_API_VERSION
+	a.AccountID = accountID
+	a.AccessToken = accessToken
 	return &a
 }
 
@@ -35,13 +37,10 @@ func (a *API) Get(path string, args Arguments, target interface{}) error {
 	urlWithParams := fmt.Sprintf("%s?%s", url, args.ToURLValues().Encode())
 
 	req, err := http.NewRequest("GET", urlWithParams, nil)
-	req.Header.Set("Accept", "application/json")
-	if a.User != "" && a.Password != "" {
-		req.SetBasicAuth(a.User, a.Password)
-	}
 	if err != nil {
 		return errors.Wrapf(err, "Invalid GET request %s", url)
 	}
+	a.AddHeaders(req)
 
 	resp, err := a.client.Do(req)
 	if err != nil {
@@ -74,15 +73,11 @@ func (a *API) Put(path string, args Arguments, postData interface{}, target inte
 	}
 
 	req, err := http.NewRequest("PUT", urlWithParams, buffer)
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Content-Type", "application/json; charset=utf-8")
-	req.Header.Set("User-Agent", "github.com/adlio/harvest")
-	if a.User != "" && a.Password != "" {
-		req.SetBasicAuth(a.User, a.Password)
-	}
 	if err != nil {
 		return errors.Wrapf(err, "Invalid PUT request %s", url)
 	}
+	a.AddHeaders(req)
+	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	resp, err := a.client.Do(req)
 	if err != nil {
@@ -117,15 +112,11 @@ func (a *API) Post(path string, args Arguments, postData interface{}, target int
 	}
 
 	req, err := http.NewRequest("POST", urlWithParams, buffer)
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Content-Type", "application/json; charset=utf-8")
-	req.Header.Set("User-Agent", "github.com/adlio/harvest")
-	if a.User != "" && a.Password != "" {
-		req.SetBasicAuth(a.User, a.Password)
-	}
 	if err != nil {
 		return errors.Wrapf(err, "Invalid POST request %s", url)
 	}
+	a.AddHeaders(req)
+	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	resp, err := a.client.Do(req)
 	if err != nil {
@@ -155,13 +146,10 @@ func (a *API) Delete(path string, args Arguments) error {
 	urlWithParams := fmt.Sprintf("%s?%s", url, args.ToURLValues().Encode())
 
 	req, err := http.NewRequest("DELETE", urlWithParams, nil)
-	req.Header.Set("Accept", "application/json")
-	if a.User != "" && a.Password != "" {
-		req.SetBasicAuth(a.User, a.Password)
-	}
 	if err != nil {
 		return errors.Wrapf(err, "Invalid DELETE request %s", url)
 	}
+	a.AddHeaders(req)
 
 	resp, err := a.client.Do(req)
 	if err != nil {
@@ -175,4 +163,27 @@ func (a *API) Delete(path string, args Arguments) error {
 	}
 
 	return nil
+}
+
+// Applies relevant User-Agent, Accept, Authorization headers
+func (a *API) AddHeaders(req *http.Request) {
+	req.Header.Set("Accept", "application/json")
+
+	if a.UserAgent != "" {
+		req.Header.Set("User-Agent", a.UserAgent)
+	} else {
+		req.Header.Set("User-Agent", defaultUserAgent())
+	}
+
+	if a.AccountID != "" {
+		req.Header.Set("Harvest-Account-Id", a.AccountID)
+	}
+
+	if a.AccessToken != "" {
+		req.Header.Set("Authorization", "Bearer "+a.AccessToken)
+	}
+}
+
+func defaultUserAgent() string {
+	return "github.com/adlio/harvest v" + CLIENT_VERSION
 }
