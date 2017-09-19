@@ -6,13 +6,8 @@ import (
 )
 
 type UsersResponse struct {
-	Users        []*User `json:"users"`
-	PerPage      int64   `json:"per_page"`
-	TotalPages   int64   `json:"total_pages"`
-	TotalEntries int64   `json:"total_entries"`
-	NextPage     *int64  `json:"next_page"`
-	PreviousPage *int64  `json:"previous_page"`
-	Page         int64   `json:"page"`
+	PagedResponse
+	Users []*User `json:"users"`
 }
 
 type User struct {
@@ -45,8 +40,13 @@ func (a *API) GetUser(userID int64, args Arguments) (user *User, err error) {
 }
 
 func (a *API) GetUsers(args Arguments) (users []*User, err error) {
+	users = make([]*User, 0)
 	usersResponse := UsersResponse{}
-	path := fmt.Sprintf("/users")
-	err = a.Get(path, args, &usersResponse)
-	return usersResponse.Users, err
+	err = a.GetPaginated("/users", args, &usersResponse, func() {
+		for _, u := range usersResponse.Users {
+			users = append(users, u)
+		}
+		usersResponse.Users = make([]*User, 0)
+	})
+	return users, err
 }
