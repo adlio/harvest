@@ -6,13 +6,8 @@ import (
 )
 
 type ProjectsResponse struct {
-	Projects     []*Project `json:"projects"`
-	PerPage      int64      `json:"per_page"`
-	TotalPages   int64      `json:"total_pages"`
-	TotalEntries int64      `json:"total_entries"`
-	NextPage     *int64     `json:"next_page"`
-	PreviousPage *int64     `json:"previous_page"`
-	Page         int64      `json:"page"`
+	PagedResponse
+	Projects []*Project `json:"projects"`
 }
 
 type Project struct {
@@ -51,10 +46,15 @@ func (a *API) GetProject(projectID int64, args Arguments) (project *Project, err
 }
 
 func (a *API) GetProjects(args Arguments) (projects []*Project, err error) {
+	projects = make([]*Project, 0)
 	projectsResponse := ProjectsResponse{}
-	path := fmt.Sprintf("/projects")
-	err = a.Get(path, args, &projectsResponse)
-	return projectsResponse.Projects, err
+	err = a.GetPaginated("/projects", args, &projectsResponse, func() {
+		for _, p := range projectsResponse.Projects {
+			projects = append(projects, p)
+		}
+		projectsResponse.Projects = make([]*Project, 0)
+	})
+	return projects, err
 }
 
 func (a *API) SaveProject(p *Project, args Arguments) error {
