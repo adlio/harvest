@@ -2,18 +2,12 @@ package harvest
 
 import (
 	"fmt"
-	"strconv"
 	"time"
 )
 
 type InvoicesResponse struct {
-	Invoices     []*Invoice `json:"invoices"`
-	PerPage      int64      `json:"per_page"`
-	TotalPages   int64      `json:"total_pages"`
-	TotalEntries int64      `json:"total_entries"`
-	NextPage     *int64     `json:"next_page"`
-	PreviousPage *int64     `json:"previous_page"`
-	Page         int64      `json:"page"`
+	PagedResponse
+	Invoices []*Invoice `json:"invoices"`
 }
 
 type Invoice struct {
@@ -58,52 +52,11 @@ func (a *API) GetInvoice(invoiceID int64, args Arguments) (invoice *Invoice, err
 func (a *API) GetInvoices(args Arguments) (invoices []*Invoice, err error) {
 	invoices = make([]*Invoice, 0)
 	invoicesResponse := InvoicesResponse{}
-
-	path := fmt.Sprintf("/invoices")
-	singlePage := false
-	page := 1
-
-	// If a "page" argument is provided, just get that single
-	// page. Otherwise, we're going to iterate over all pages.
-	if strPage := args["page"]; strPage != "" {
-		if pageArg, _ := strconv.Atoi(strPage); pageArg > 0 {
-			page = pageArg
-			singlePage = true
+	err = a.GetPaginated("/invoices", args, &invoicesResponse, func() {
+		for _, i := range invoicesResponse.Invoices {
+			invoices = append(invoices, i)
 		}
-	}
-
-	args["page"] = fmt.Sprintf("%d", page)
-	err = a.Get(path, args, &invoicesResponse)
-	for _, i := range invoicesResponse.Invoices {
-		invoices = append(invoices, i)
-	}
-
-	if !singlePage && invoicesResponse.TotalPages > 1 {
-		page = 2
-		moreInvoices := true
-
-		// Loop over additional pages
-		for moreInvoices == true {
-
-			// Get the next page
-			args["page"] = fmt.Sprintf("%d", page)
-			invoicesResponse.Invoices = make([]*Invoice, 0)
-			err = a.Get(path, args, &invoicesResponse)
-			if err != nil {
-				return
-			}
-
-			if len(invoicesResponse.Invoices) > 0 {
-				for _, i := range invoicesResponse.Invoices {
-					invoices = append(invoices, i)
-				}
-			} else {
-				// Stop the loop
-				moreInvoices = false
-			}
-			page += 1
-		}
-	}
-
-	return
+		invoicesResponse.Invoices = make([]*Invoice, 0)
+	})
+	return invoices, err
 }

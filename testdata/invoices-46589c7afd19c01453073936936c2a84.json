@@ -174,7 +174,7 @@
               "updated_at":"2017-03-20T15:09:37Z",
               "tax":null,
               "tax_amount":0.0,
-              "subject":"",
+              "subject":"This is the last invoice",
               "recurring_invoice_id":null,
               "tax2":null,
               "tax2_amount":0.0,

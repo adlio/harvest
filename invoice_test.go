@@ -37,6 +37,12 @@ func TestGetInvoices(t *testing.T) {
 	if invoices[0].ID != 12286767 {
 		t.Errorf("Incorrect invoice ID '%v'. Expected 12286767", invoices[0].ID)
 	}
+	if invoices[0].Subject != "Client 1 Invoice 12286767" {
+		t.Errorf("Incorrect invoice Subject '%s'. Expected 'Client 1 Invoice 12286767'.", invoices[0].Subject)
+	}
+	if invoices[7].Subject != "This is the last invoice" {
+		t.Errorf("Incorrect invoice Subject '%s'. Expected 'This is the last invoice'.", invoices[7].Subject)
+	}
 }
 
 func TestGetSinglePageOfInvoices(t *testing.T) {
@@ -46,7 +52,7 @@ func TestGetSinglePageOfInvoices(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(invoices) != 2 {
+	if len(invoices) != 8 {
 		t.Errorf("Incorrect number of invoices. Expected 8, got %d", len(invoices))
 	}
 	if invoices[0].ID != 12286767 {
