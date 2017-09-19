@@ -6,6 +6,7 @@ import (
 )
 
 type TasksResponse struct {
+	PagedResponse
 	Tasks []*Task `json:"tasks"`
 }
 
@@ -28,8 +29,13 @@ func (a *API) GetTask(taskID int64, args Arguments) (task *Task, err error) {
 }
 
 func (a *API) GetTasks(args Arguments) (tasks []*Task, err error) {
+	tasks = make([]*Task, 0)
 	tasksResponse := TasksResponse{}
-	path := fmt.Sprintf("/tasks")
-	err = a.Get(path, args, &tasksResponse)
-	return tasksResponse.Tasks, err
+	err = a.GetPaginated("/tasks", args, &tasksResponse, func() {
+		for _, t := range tasksResponse.Tasks {
+			tasks = append(tasks, t)
+		}
+		tasksResponse.Tasks = make([]*Task, 0)
+	})
+	return tasks, err
 }
