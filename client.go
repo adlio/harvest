@@ -6,13 +6,8 @@ import (
 )
 
 type ClientsResponse struct {
-	Clients      []*Client `json:"clients"`
-	PerPage      int64     `json:"per_page"`
-	TotalPages   int64     `json:"total_pages"`
-	TotalEntries int64     `json:"total_entries"`
-	NextPage     *int64    `json:"next_page"`
-	PreviousPage *int64    `json:"previous_page"`
-	Page         int64     `json:"page"`
+	PagedResponse
+	Clients []*Client `json:"clients"`
 }
 
 type Client struct {
@@ -38,8 +33,14 @@ func (a *API) GetClient(clientID int64, args Arguments) (client *Client, err err
 }
 
 func (a *API) GetClients(args Arguments) (clients []*Client, err error) {
+	clients = make([]*Client, 0)
 	clientsResponse := ClientsResponse{}
 	path := fmt.Sprintf("/clients")
-	err = a.Get(path, args, &clientsResponse)
-	return clientsResponse.Clients, err
+	err = a.GetPaginated(path, args, &clientsResponse, func() {
+		for _, c := range clientsResponse.Clients {
+			clients = append(clients, c)
+		}
+		clientsResponse.Clients = make([]*Client, 0)
+	})
+	return clients, err
 }
