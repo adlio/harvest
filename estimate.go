@@ -28,10 +28,10 @@ type Estimate struct {
 	Notes          string              `json:"notes"`
 	Currency       string              `json:"currency"`
 	IssueDate      *Date               `json:"issue_date,omitempty"`
-	SentAt         time.Time           `json:"sent_at,omitempty"`
+	SentAt         *time.Time           `json:"sent_at,omitempty"`
 	LineItems      []*EstimateLineItem `json:"line_items"`
-	AcceptedAt     time.Time           `json:"accepted_at,omitempty"`
-	DeclinedAt     time.Time           `json:"declined_at,omitempty"`
+	AcceptedAt     *time.Time           `json:"accepted_at,omitempty"`
+	DeclinedAt     *time.Time           `json:"declined_at,omitempty"`
 	CreatedAt      time.Time           `json:"created_at,omitempty"`
 	UpdatedAt      time.Time           `json:"updated_at,omitempty"`
 }
