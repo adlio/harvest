@@ -32,6 +32,28 @@ func NewTokenAPI(accountID string, accessToken string) *API {
 	return &a
 }
 
+func (a *API) GetPaginated(path string, args Arguments, target Pageable, afterFetch func()) error {
+	page := 1
+	args["page"] = fmt.Sprintf("%d", page)
+	err := a.Get(path, args, target)
+	if err != nil {
+		return err
+	}
+
+	afterFetch()
+
+	for target.HasNextPage() {
+		page++
+		args["page"] = fmt.Sprintf("%d", page)
+		err = a.Get(path, args, target)
+		if err != nil {
+			return err
+		}
+		afterFetch()
+	}
+	return nil
+}
+
 func (a *API) Get(path string, args Arguments, target interface{}) error {
 	url := fmt.Sprintf("%s%s", a.BaseURL, path)
 	urlWithParams := fmt.Sprintf("%s?%s", url, args.ToURLValues().Encode())

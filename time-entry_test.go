@@ -5,6 +5,29 @@ import (
 	"time"
 )
 
+func TestGetTimeEntriesUpdatedSince(t *testing.T) {
+	a := testAPI()
+	projectResponse := mockResponse("time-entries", "project-example.json")
+	a.BaseURL = projectResponse.URL
+	sinceDate, err := time.Parse("2006-01-02", "2017-01-01")
+	timeEntries, err := a.GetTimeEntriesUpdatedSince(sinceDate, Defaults())
+	if err != nil {
+		t.Fatal(err)
+	}
+	validateTimeEntriesFromProjectExample(timeEntries, t)
+}
+
+func TestGetTimeEntriesBetween(t *testing.T) {
+	a := testAPI()
+	projectResponse := mockResponse("time-entries", "project-example.json")
+	a.BaseURL = projectResponse.URL
+	timeEntries, err := a.GetTimeEntriesBetween(time.Now().AddDate(-1, 0, 0), time.Now(), Defaults())
+	if err != nil {
+		t.Fatal(err)
+	}
+	validateTimeEntriesFromProjectExample(timeEntries, t)
+}
+
 func TestGetTimeEntriesForProjectBetween(t *testing.T) {
 	a := testAPI()
 	projectResponse := mockResponse("time-entries", "project-example.json")
@@ -13,6 +36,10 @@ func TestGetTimeEntriesForProjectBetween(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	validateTimeEntriesFromProjectExample(timeEntries, t)
+}
+
+func validateTimeEntriesFromProjectExample(timeEntries []*TimeEntry, t *testing.T) {
 	if len(timeEntries) != 3 {
 		t.Errorf("Incorrect number of entries %d", len(timeEntries))
 	}

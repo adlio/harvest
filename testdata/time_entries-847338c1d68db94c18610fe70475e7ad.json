@@ -72,9 +72,9 @@
     }
   ],
   "per_page": 3,
-  "total_pages": 1,
-  "total_entries": 3,
-  "next_page": 2,
+  "total_pages": 2,
+  "total_entries": 6,
+  "next_page": null,
   "previous_page": null,
-  "page": 1
+  "page": 2
 }

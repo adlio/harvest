@@ -1,18 +1,13 @@
 package harvest
 
 import (
-	"fmt"
+	"strconv"
 	"time"
 )
 
 type TimeEntriesResponse struct {
-	TimeEntries  []*TimeEntry `json:"time_entries"`
-	PerPage      int64        `json:"per_page"`
-	TotalPages   int64        `json:"total_pages"`
-	TotalEntries int64        `json:"total_entries"`
-	NextPage     *int64       `json:"next_page"`
-	PreviousPage *int64       `json:"previous_page"`
-	Page         int64        `json:"page"`
+	PagedResponse
+	TimeEntries []*TimeEntry `json:"time_entries"`
 }
 
 type TimeEntry struct {
@@ -63,37 +58,45 @@ type TaskStub struct {
 	Name string `json:"name"`
 }
 
-func (a *API) GetTimeEntriesUpdatedSince(sinceDate time.Time, args Arguments) ([]*TimeEntry, error) {
+func (a *API) GetTimeEntries(args Arguments) ([]*TimeEntry, error) {
+	entries := make([]*TimeEntry, 0)
 	timeEntriesResponse := TimeEntriesResponse{}
+	err := a.GetPaginated("/time_entries", args, &timeEntriesResponse, func() {
+		for _, te := range timeEntriesResponse.TimeEntries {
+			entries = append(entries, te)
+		}
+	})
+	return entries, err
+}
+
+func (a *API) GetTimeEntriesUpdatedSince(sinceDate time.Time, args Arguments) ([]*TimeEntry, error) {
 	since := sinceDate.Format(time.RFC3339)
-	path := fmt.Sprintf("/time_entries?updated_since=%s", since)
-	err := a.Get(path, args, &timeEntriesResponse)
-	return timeEntriesResponse.TimeEntries, err
+	args["updated_since"] = since
+	return a.GetTimeEntries(args)
 }
 
 func (a *API) GetTimeEntriesBetween(fromDate time.Time, toDate time.Time, args Arguments) ([]*TimeEntry, error) {
-	timeEntriesResponse := TimeEntriesResponse{}
 	from := fromDate.Format("20060102")
 	to := toDate.Format("20060102")
-	path := fmt.Sprintf("/time_entries?from=%s&to=%s", from, to)
-	err := a.Get(path, args, &timeEntriesResponse)
-	return timeEntriesResponse.TimeEntries, err
+	args["from"] = from
+	args["to"] = to
+	return a.GetTimeEntries(args)
 }
 
 func (a *API) GetTimeEntriesForProjectBetween(projectID int64, fromDate time.Time, toDate time.Time, args Arguments) ([]*TimeEntry, error) {
-	timeEntriesResponse := TimeEntriesResponse{}
 	from := fromDate.Format("20060102")
 	to := toDate.Format("20060102")
-	path := fmt.Sprintf("/time_entries?project_id=%d&from=%s&to=%s", projectID, from, to)
-	err := a.Get(path, args, &timeEntriesResponse)
-	return timeEntriesResponse.TimeEntries, err
+	args["project_id"] = strconv.FormatInt(projectID, 10)
+	args["from"] = from
+	args["to"] = to
+	return a.GetTimeEntries(args)
 }
 
 func (a *API) GetTimeEntriesForUserBetween(userID int64, fromDate time.Time, toDate time.Time, args Arguments) ([]*TimeEntry, error) {
-	timeEntriesResponse := TimeEntriesResponse{}
 	from := fromDate.Format("20060102")
 	to := toDate.Format("20060102")
-	path := fmt.Sprintf("/time_entries?user_id=%d&from=%s&to=%s", userID, from, to)
-	err := a.Get(path, args, &timeEntriesResponse)
-	return timeEntriesResponse.TimeEntries, err
+	args["user_id"] = strconv.FormatInt(userID, 10)
+	args["from"] = from
+	args["to"] = to
+	return a.GetTimeEntries(args)
 }
