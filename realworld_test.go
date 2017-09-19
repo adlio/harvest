@@ -203,6 +203,19 @@ func TestRealWorldGetUsers(t *testing.T) {
 	}
 }
 
+func TestRealWorldGetEstimates(t *testing.T) {
+	api := realWorldTestAPI(t)
+
+	estimates, err := api.GetEstimates(Defaults())
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(estimates) < 1 {
+		t.Error("GetEstimates() returned no estimates. Are you testing with an empty Harvest account?")
+	}
+}
+
 /*
 func TestCreateUpdateDeleteProject(t *testing.T) {
 	api := realWorldTestAPI(t)
