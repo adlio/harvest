@@ -65,6 +65,7 @@ func (a *API) GetTimeEntries(args Arguments) ([]*TimeEntry, error) {
 		for _, te := range timeEntriesResponse.TimeEntries {
 			entries = append(entries, te)
 		}
+		timeEntriesResponse.TimeEntries = make([]*TimeEntry, 0)
 	})
 	return entries, err
 }
