@@ -6,13 +6,8 @@ import (
 )
 
 type ExpensesResponse struct {
-	Expenses     []*Expense `json:"expenses"`
-	PerPage      int64      `json:"per_page"`
-	TotalPages   int64      `json:"total_pages"`
-	TotalEntries int64      `json:"total_entries"`
-	NextPage     *int64     `json:"next_page"`
-	PreviousPage *int64     `json:"previous_page"`
-	Page         int64      `json:"page"`
+	PagedResponse
+	Expenses []*Expense `json:"expenses"`
 }
 
 type Expense struct {
@@ -44,8 +39,13 @@ func (a *API) GetExpense(expenseID int64, args Arguments) (expense *Expense, err
 }
 
 func (a *API) GetExpenses(args Arguments) (expenses []*Expense, err error) {
+	expenses = make([]*Expense, 0)
 	expensesResponse := ExpensesResponse{}
-	path := fmt.Sprintf("/expenses")
-	err = a.Get(path, args, &expensesResponse)
-	return expensesResponse.Expenses, err
+	err = a.GetPaginated("/expenses", args, &expensesResponse, func() {
+		for _, e := range expensesResponse.Expenses {
+			expenses = append(expenses, e)
+		}
+		expensesResponse.Expenses = make([]*Expense, 0)
+	})
+	return expenses, err
 }
