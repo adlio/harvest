@@ -45,6 +45,11 @@ func TestRealWorldGetClients(t *testing.T) {
 	if client.Name == "" {
 		t.Error("Client name was blank")
 	}
+
+	_, err = api.GetClientContacts(client.ID, Defaults())
+	if err != nil {
+		t.Error(err)
+	}
 }
 
 func TestRealWorldGetProjects(t *testing.T) {
@@ -92,12 +97,12 @@ func TestRealWorldGetProjects(t *testing.T) {
 
 func TestRealWorldGetTimeEntries(t *testing.T) {
 	api := realWorldTestAPI(t)
-	tes, err := api.GetTimeEntriesBetween(time.Now().AddDate(-10, 0, 0), time.Now(), Defaults())
+	tes, err := api.GetTimeEntriesBetween(time.Now().AddDate(0, 0, -7), time.Now(), Defaults())
 	if err != nil {
 		t.Error(err)
 	}
 	if len(tes) < 1 {
-		t.Error("GetTimeEntriesBetween() failed to find time entries in the last 10 years. Is this an empty Harvest account?")
+		t.Error("GetTimeEntriesBetween() failed to find time entries in the last 7 days. Is this an empty Harvest account?")
 	}
 }
 
