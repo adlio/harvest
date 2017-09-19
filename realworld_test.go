@@ -214,6 +214,15 @@ func TestRealWorldGetEstimates(t *testing.T) {
 	if len(estimates) < 1 {
 		t.Error("GetEstimates() returned no estimates. Are you testing with an empty Harvest account?")
 	}
+
+	estimate, err := api.GetEstimate(estimates[0].ID, Defaults())
+	if err != nil {
+		t.Error(err)
+	}
+
+	if estimate.Subject == "" {
+		t.Error("Retrieved estimate was missing a subject.")
+	}
 }
 
 /*
