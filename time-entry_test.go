@@ -46,6 +46,12 @@ func validateTimeEntriesFromProjectExample(timeEntries []*TimeEntry, t *testing.
 	if timeEntries[0].Project.ID != 3 {
 		t.Errorf("Expected 3 for ProjectID, got %d", timeEntries[0].Project.ID)
 	}
+	if timeEntries[0].User.ID != 1 {
+		t.Errorf("Expected 1 for UserID, got %d", timeEntries[0].User.ID)
+	}
+	if timeEntries[0].User.Name != "The First User" {
+		t.Errorf("Expected 'The First User' for User name, got '%s'", timeEntries[0].User.Name)
+	}
 }
 
 func TestGetTimeEntriesForUserBetween(t *testing.T) {
