@@ -11,9 +11,8 @@ type TimeEntriesResponse struct {
 }
 
 type TimeEntry struct {
-	ID             int64  `json:"id"`
-	SpentDateRaw   string `json:"spent_at"`
-	SpentDate      time.Time
+	ID             int64        `json:"id"`
+	SpentDate      time.Time    `json:"spent_date"`
 	User           *UserStub    `json:"user,omitempty"`
 	Client         *ClientStub  `json:"client,omitempty"`
 	Project        *ProjectStub `json:"project,omitempty"`
