@@ -16,7 +16,7 @@ type TimeEntry struct {
 	User           *UserStub    `json:"user,omitempty"`
 	Client         *ClientStub  `json:"client,omitempty"`
 	Project        *ProjectStub `json:"project,omitempty"`
-	Task           *TaskStub    `json:"task:omitempty"`
+	Task           *TaskStub    `json:"task,omitempty"`
 	HoursWithTimer float64      `json:"hours_with_timer"`
 	Hours          float64      `json:"hours"`
 	Notes          string       `json:"notes"`
