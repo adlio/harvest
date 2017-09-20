@@ -3,7 +3,7 @@
     {
       "id":559966390,
       "notes":"Sales call with new client",
-      "spent_at":"2017-01-11",
+      "spent_date":"2017-01-11",
       "hours":1.0,
       "user": {
         "id": 1, "name": "The First User" },
@@ -25,7 +25,7 @@
     {
       "id":559983812,
       "notes":"review website and client call",
-      "spent_at":"2017-01-11",
+      "spent_date":"2017-01-11",
       "hours":1.0,
       "user": {
         "id": 1,
@@ -49,7 +49,7 @@
     {
       "id":564081813,
       "notes":"Next steps",
-      "spent_at":"2017-01-20",
+      "spent_date":"2017-01-20",
       "hours":0.75,
       "user": {
         "id": 1,
