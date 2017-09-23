@@ -11,7 +11,7 @@ func TestGetEstimate(t *testing.T) {
 	if estimate.Subject != "Online Store - Phase 2" {
 		t.Errorf("Incorrect Subject '%s'", estimate.Subject)
 	}
-	if estimate.Discount != 10.0 {
+	if *estimate.Discount != 10.0 {
 		t.Errorf("Expected Discount of 10.0. Got %0.1f", estimate.Discount)
 	}
 	if estimate.Amount != 9630.0 {
