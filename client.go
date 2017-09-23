@@ -11,18 +11,13 @@ type ClientsResponse struct {
 }
 
 type Client struct {
-	ID                      int64     `json:"id"`
-	Name                    string    `json:"name"`
-	Active                  bool      `json:"active"`
-	CreatedAt               time.Time `json:"created_at"`
-	UpdatedAt               time.Time `json:"updated_at"`
-	HighriseID              int64     `json:"highrise_id"`
-	CacheVersion            int64     `json:"cache_version"`
-	Currency                string    `json:"currency"`
-	CurrencySymbol          string    `json:"currency_symbol"`
-	Details                 string    `json:"details"`
-	DefaultInvoiceTimeframe string    `json:"default_invoice_timeframe"`
-	LastInvoiceKind         string    `json:"last_invoice_kind"`
+	ID        int64     `json:"id"`
+	Name      string    `json:"name"`
+	IsActive  bool      `json:"is_active"`
+	Address   string    `json:"address"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Currency  string    `json:"currency"`
 }
 
 func (a *API) GetClient(clientID int64, args Arguments) (client *Client, err error) {

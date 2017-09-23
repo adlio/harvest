@@ -19,19 +19,19 @@ type Estimate struct {
 	Number         string              `json:"number"`
 	PurchaseOrder  string              `json:"purchase_order"`
 	Amount         float64             `json:"amount"`
-	Tax            float64             `json:"tax"`
+	Tax            *float64            `json:"tax"`
 	TaxAmount      float64             `json:"tax_amount"`
-	Tax2           float64             `json:"tax2"`
+	Tax2           *float64            `json:"tax2"`
 	Tax2Amount     float64             `json:"tax2_amount"`
-	Discount       float64             `json:"discount"`
+	Discount       *float64            `json:"discount"`
 	DiscountAmount float64             `json:"discount_amount"`
 	Notes          string              `json:"notes"`
 	Currency       string              `json:"currency"`
 	IssueDate      *Date               `json:"issue_date,omitempty"`
-	SentAt         *time.Time           `json:"sent_at,omitempty"`
+	SentAt         *time.Time          `json:"sent_at,omitempty"`
 	LineItems      []*EstimateLineItem `json:"line_items"`
-	AcceptedAt     *time.Time           `json:"accepted_at,omitempty"`
-	DeclinedAt     *time.Time           `json:"declined_at,omitempty"`
+	AcceptedAt     *time.Time          `json:"accepted_at,omitempty"`
+	DeclinedAt     *time.Time          `json:"declined_at,omitempty"`
 	CreatedAt      time.Time           `json:"created_at,omitempty"`
 	UpdatedAt      time.Time           `json:"updated_at,omitempty"`
 }
