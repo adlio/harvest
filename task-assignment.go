@@ -17,16 +17,14 @@ type TaskAssignmentsResponse struct {
 }
 
 type TaskAssignment struct {
-	ID          int64     `json:"id,omitempty"`
-	ProjectID   int64     `json:"project_id"`
-	TaskID      int64     `json:"task_id"`
-	Billable    bool      `json:"billable"`
-	Deactivated bool      `json:"deactivated"`
-	Budget      *float64  `json:"budget"`
-	HourlyRate  *float64  `json:"hourly_rate"`
-	Estimate    *float64  `json:"estimate"`
-	UpdatedAt   time.Time `json:"updated_at"`
-	CreatedAt   time.Time `json:"created_at"`
+	ID         int64     `json:"id,omitempty"`
+	Task       TaskStub  `json:"task,omitempty"`
+	Billable   bool      `json:"billable"`
+	IsActive   bool      `json:"is_active"`
+	Budget     *float64  `json:"budget"`
+	HourlyRate *float64  `json:"hourly_rate"`
+	UpdatedAt  time.Time `json:"updated_at"`
+	CreatedAt  time.Time `json:"created_at"`
 }
 
 func (a *API) GetTaskAssignments(projectID int64, args Arguments) (taskAssignments []*TaskAssignment, err error) {
@@ -43,18 +41,18 @@ func (a *API) GetTaskAssignment(projectID int64, taskAssignmentID int64, args Ar
 	return taskAssignment, err
 }
 
-func (a *API) CreateTaskAssignment(ta *TaskAssignment, args Arguments) error {
-	path := fmt.Sprintf("/projects/%v/task_assignments", ta.ProjectID)
+func (a *API) CreateTaskAssignment(projectID int64, ta *TaskAssignment, args Arguments) error {
+	path := fmt.Sprintf("/projects/%v/task_assignments", projectID)
 	return a.Post(path, args, ta, ta)
 }
 
-func (a *API) UpdateTaskAssignment(ta *TaskAssignment, args Arguments) error {
-	path := fmt.Sprintf("/projects/%v/task_assignments/%v", ta.ProjectID, ta.ID)
+func (a *API) UpdateTaskAssignment(projectID int64, ta *TaskAssignment, args Arguments) error {
+	path := fmt.Sprintf("/projects/%v/task_assignments/%v", projectID, ta.ID)
 	return a.Put(path, args, ta, ta)
 }
 
-func (a *API) DeleteTaskAssignment(ta *TaskAssignment, args Arguments) error {
-	path := fmt.Sprintf("/projects/%v/task_assignments/%v", ta.ProjectID, ta.ID)
+func (a *API) DeleteTaskAssignment(projectID int64, ta *TaskAssignment, args Arguments) error {
+	path := fmt.Sprintf("/projects/%v/task_assignments/%v", projectID, ta.ID)
 	return a.Delete(path, args)
 }
 
@@ -72,8 +70,8 @@ func (a *API) CopyTaskAssignments(destProjectID int64, sourceProjectID int64) er
 
 	// Remove incorrect TaskAssignments
 	for _, destTA := range destTAs {
-		if !ContainsTaskID(destTA.TaskID, sourceTAs) {
-			err = a.DeleteTaskAssignment(destTA, Defaults())
+		if !ContainsTaskID(destTA.Task.ID, sourceTAs) {
+			err = a.DeleteTaskAssignment(destProjectID, destTA, Defaults())
 			if err != nil {
 				return err
 			}
@@ -82,31 +80,28 @@ func (a *API) CopyTaskAssignments(destProjectID int64, sourceProjectID int64) er
 
 	// Add missing TaskAssignments, update existing ones
 	for _, sourceTA := range sourceTAs {
-		if !ContainsTaskID(sourceTA.TaskID, destTAs) {
+		if !ContainsTaskID(sourceTA.Task.ID, destTAs) {
 			ta := TaskAssignment{
-				ProjectID:   destProjectID,
-				TaskID:      sourceTA.TaskID,
-				Billable:    sourceTA.Billable,
-				Deactivated: sourceTA.Deactivated,
-				Budget:      sourceTA.Budget,
-				HourlyRate:  sourceTA.HourlyRate,
-				Estimate:    sourceTA.Estimate,
-				CreatedAt:   time.Now(),
-				UpdatedAt:   time.Now(),
+				Task:       TaskStub{ID: sourceTA.Task.ID},
+				Billable:   sourceTA.Billable,
+				IsActive:   sourceTA.IsActive,
+				Budget:     sourceTA.Budget,
+				HourlyRate: sourceTA.HourlyRate,
+				CreatedAt:  time.Now(),
+				UpdatedAt:  time.Now(),
 			}
-			err = a.CreateTaskAssignment(&ta, Defaults())
+			err = a.CreateTaskAssignment(destProjectID, &ta, Defaults())
 			if err != nil {
 				return err
 			}
 		} else {
 			for _, newTA := range destTAs {
-				if newTA.TaskID == sourceTA.TaskID && TaskAssignmentAttributesDiffer(newTA, sourceTA) {
+				if newTA.Task.ID == sourceTA.Task.ID && TaskAssignmentAttributesDiffer(newTA, sourceTA) {
 					newTA.Billable = sourceTA.Billable
-					newTA.Deactivated = sourceTA.Deactivated
+					newTA.IsActive = sourceTA.IsActive
 					newTA.Budget = sourceTA.Budget
 					newTA.HourlyRate = sourceTA.HourlyRate
-					newTA.Estimate = sourceTA.Estimate
-					err = a.UpdateTaskAssignment(newTA, Defaults())
+					err = a.UpdateTaskAssignment(destProjectID, newTA, Defaults())
 					if err != nil {
 						return err
 					}
@@ -119,7 +114,7 @@ func (a *API) CopyTaskAssignments(destProjectID int64, sourceProjectID int64) er
 
 func ContainsTaskID(taskID int64, tas []*TaskAssignment) bool {
 	for _, ta := range tas {
-		if ta.TaskID == taskID {
+		if ta.Task.ID == taskID {
 			return true
 		}
 	}
@@ -130,16 +125,13 @@ func TaskAssignmentAttributesDiffer(ta1, ta2 *TaskAssignment) bool {
 	if ta1.Billable != ta2.Billable {
 		return true
 	}
-	if ta1.Deactivated != ta2.Deactivated {
+	if ta1.IsActive != ta2.IsActive {
 		return true
 	}
 	if !HaveSameFloat64Value(ta1.Budget, ta2.Budget) {
 		return true
 	}
 	if !HaveSameFloat64Value(ta1.HourlyRate, ta2.HourlyRate) {
-		return true
-	}
-	if !HaveSameFloat64Value(ta1.Estimate, ta2.Estimate) {
 		return true
 	}
 	return false
