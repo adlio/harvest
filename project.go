@@ -10,6 +10,11 @@ type ProjectsResponse struct {
 	Projects []*Project `json:"projects"`
 }
 
+type ProjectStub struct {
+	ID   int64  `json:"id"`
+	Name string `json:"name"`
+}
+
 type Project struct {
 	ID                               int64     `json:"id,omitempty"`
 	ClientID                         int64     `json:"client_id,omitempty"`

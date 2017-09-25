@@ -36,26 +36,6 @@ type TimeEntry struct {
 	CostRate       float64      `json:"cost_rate"`
 }
 
-type UserStub struct {
-	ID   int64  `json:"id"`
-	Name string `json:"name"`
-}
-
-type ClientStub struct {
-	ID   int64  `json:"id"`
-	Name string `json:"name"`
-}
-
-type ProjectStub struct {
-	ID   int64  `json:"id"`
-	Name string `json:"name"`
-}
-
-type TaskStub struct {
-	ID   int64  `json:"id"`
-	Name string `json:"name"`
-}
-
 func (a *API) GetTimeEntries(args Arguments) ([]*TimeEntry, error) {
 	entries := make([]*TimeEntry, 0)
 	timeEntriesResponse := TimeEntriesResponse{}

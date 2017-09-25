@@ -9,6 +9,10 @@ type ClientsResponse struct {
 	PagedResponse
 	Clients []*Client `json:"clients"`
 }
+type ClientStub struct {
+	ID   int64  `json:"id"`
+	Name string `json:"name"`
+}
 
 type Client struct {
 	ID        int64     `json:"id"`

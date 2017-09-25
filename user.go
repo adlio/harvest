@@ -10,6 +10,11 @@ type UsersResponse struct {
 	Users []*User `json:"users"`
 }
 
+type UserStub struct {
+	ID   int64  `json:"id"`
+	Name string `json:"name"`
+}
+
 type User struct {
 	ID                           int64     `json:"id"`
 	Email                        string    `json:"email"`

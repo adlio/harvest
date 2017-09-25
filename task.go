@@ -10,6 +10,11 @@ type TasksResponse struct {
 	Tasks []*Task `json:"tasks"`
 }
 
+type TaskStub struct {
+	ID   int64  `json:"id"`
+	Name string `json:"name"`
+}
+
 type Task struct {
 	ID                int64     `json:"id"`
 	Name              string    `json:"name"`
