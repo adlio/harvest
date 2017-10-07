@@ -16,11 +16,16 @@ const HARVEST_API_VERSION = "v2"
 
 type API struct {
 	client       *http.Client
+	Logger       logger
 	BaseURL      string
 	AccountID    string
 	AccessToken  string
 	RefreshToken string
 	UserAgent    string
+}
+
+type logger interface {
+	Debugf(string, ...interface{})
 }
 
 func NewTokenAPI(accountID string, accessToken string) *API {
@@ -208,6 +213,12 @@ func (a *API) AddHeaders(req *http.Request) {
 
 	if a.AccessToken != "" {
 		req.Header.Set("Authorization", "Bearer "+a.AccessToken)
+	}
+}
+
+func (a *API) log(format string, args ...interface{}) {
+	if a.Logger != nil {
+		a.Logger.Debugf(format, args)
 	}
 }
 
