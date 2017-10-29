@@ -1,11 +1,14 @@
 {
   "id": 12286767,
-  "client_id": 3781881,
+  "client": {
+    "id": 3781881,
+    "name": "Test Client"
+  },
   "period_start": null,
   "period_end": null,
   "number": "20151058",
-  "issued_at": "2017-04-01",
-  "due_at": "2017-05-01",
+  "issue_date": "2017-04-01",
+  "due_date": "2017-05-01",
   "amount": 54.6,
   "currency": "United States Dollar - USD",
   "state": "draft",
@@ -15,6 +18,8 @@
   "due_at_human_format": "Net 30",
   "created_at": "2017-03-23T16:26:14Z",
   "updated_at": "2017-03-23T16:27:07Z",
+  "paid_at": "2017-03-23T16:27:07Z",
+  "closed_at": "2017-03-23T16:27:07Z",
   "tax": null,
   "tax_amount": 0,
   "subject": "An Invoice for Some Kind of Service",

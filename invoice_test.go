@@ -16,8 +16,8 @@ func TestGetInvoice(t *testing.T) {
 	if invoice.ID != 12286767 {
 		t.Errorf("Incorrect expense ID '%v'", invoice.ID)
 	}
-	if invoice.ClientID != 3781881 {
-		t.Errorf("Incorrect client ID '%v'", invoice.ClientID)
+	if invoice.Client.ID != 3781881 {
+		t.Errorf("Incorrect client ID '%v'", invoice.Client.ID)
 	}
 	if invoice.Notes != "Thank you in advance for your prompt payment, which is essential to our ability to best serve you." {
 		t.Errorf("Incorrect Invoice Notes '%s'", invoice.Notes)
