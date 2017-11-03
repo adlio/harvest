@@ -16,7 +16,7 @@ type Invoice struct {
 	PeriodStart        Date        `json:"period_start"`
 	PeriodEnd          Date        `json:"period_end"`
 	Number             string      `json:"number"`
-	IssuedDate         Date        `json:"issue_date"`
+	IssueDate          Date        `json:"issue_date"`
 	DueDate            Date        `json:"due_date"`
 	Amount             float64     `json:"amount"`
 	Currency           string      `json:"currency"`
