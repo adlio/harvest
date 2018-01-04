@@ -42,7 +42,19 @@ type Invoice struct {
 	DiscountAmount     float64     `json:"discount_amount"`
 	RetainerID         int64       `json:"retainer_id"`
 	CreatedByID        int64       `json:"created_by_id"`
-	CSVLineItems       string      `json:"csv_line_items"`
+	LineItems          []*LineItem `json:"line_items"`
+}
+
+type LineItem struct {
+	ID          int64        `json:"id"`
+	Kind        string       `json:"kind"`
+	Description string       `json:"description"`
+	Quantity    float64      `json:"quantity"`
+	UnitPrice   float64      `json:"unit_price"`
+	Amount      float64      `json:"amount"`
+	Taxed       bool         `json:"taxed"`
+	Taxed2      bool         `json:"taxed2"`
+	Project     *ProjectStub `json:"project"`
 }
 
 func (a *API) GetInvoice(invoiceID int64, args Arguments) (invoice *Invoice, err error) {

@@ -32,5 +32,33 @@
   "discount_amount": 0,
   "retainer_id": null,
   "created_by_id": 1110008,
-  "client_name": "Acme Client Company, Inc."
+  "client_name": "Acme Client Company, Inc.",
+  "line_items": [
+    {
+      "id": 61158030,
+      "kind": "Service",
+      "description": "Project Retainer",
+      "quantity": 1,
+      "unit_price": 750,
+      "amount": 750,
+      "taxed": false,
+      "taxed2": false,
+      "project": {
+        "id": 9481957,
+        "name": "A Retainer Project for Acme",
+        "code": ""
+      }
+    },
+    {
+      "id": 61158031,
+      "kind": "Adjustment",
+      "description": "Project Hosting",
+      "quantity": 1,
+      "unit_price": 50,
+      "amount": 50,
+      "taxed": false,
+      "taxed2": false,
+      "project": null
+    }
+  ]
 }

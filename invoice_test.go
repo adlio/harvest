@@ -22,6 +22,12 @@ func TestGetInvoice(t *testing.T) {
 	if invoice.Notes != "Thank you in advance for your prompt payment, which is essential to our ability to best serve you." {
 		t.Errorf("Incorrect Invoice Notes '%s'", invoice.Notes)
 	}
+	if len(invoice.LineItems) != 2 {
+		t.Errorf("Failed to parse LineItems from '%d'", invoice.ID)
+	}
+	if invoice.LineItems[0].Kind != "Service" {
+		t.Errorf("Got '%s' for first LineItem Type. Expected 'Service'", invoice.LineItems[0].Kind)
+	}
 }
 
 func TestGetInvoices(t *testing.T) {
