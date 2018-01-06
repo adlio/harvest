@@ -21,8 +21,8 @@ type Project struct {
 	ClientID                         int64     `json:"client_id,omitempty"`
 	Name                             string    `json:"name,omitempty"`
 	Code                             string    `json:"code,omitempty"`
-	Active                           bool      `json:"active"`
-	Billable                         bool      `json:"billable"`
+	IsActive                         bool      `json:"is_active"`
+	IsBillable                       bool      `json:"is_billable"`
 	BillBy                           string    `json:"bill_by,omitempty"`
 	HourlyRate                       *float64  `json:"hourly_rate,omitempty"`
 	BudgetBy                         string    `json:"budget_by,omitempty"`
