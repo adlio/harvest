@@ -68,7 +68,7 @@ func TestGetProjectWithStartEndDates(t *testing.T) {
 		t.Errorf("Expected 'TEST', got '%s'.", project.Name)
 	}
 
-	if !project.Active {
+	if !project.IsActive {
 		t.Error("Project should have been active")
 	}
 
@@ -120,7 +120,7 @@ func TestCreateProject(t *testing.T) {
 
 	p := Project{
 		Name:     "New Name",
-		Active:   true,
+		IsActive: true,
 		ClientID: 12345,
 	}
 
@@ -142,7 +142,7 @@ func TestUpdateProject(t *testing.T) {
 	p := Project{
 		ID:       1234,
 		Name:     "New Name",
-		Active:   true,
+		IsActive: true,
 		ClientID: 12345,
 	}
 
