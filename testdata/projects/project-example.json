@@ -1,7 +1,11 @@
 {
   "id": 9292184,
   "client_id": 3954262,
-  "name": "NYRA Web Site Builds x 5",
+  "client": {
+    "id": 3954262,
+    "name": "Client Name"
+  },
+  "name": "Project Names",
   "code": "",
   "is_active": true,
   "is_billable": true,

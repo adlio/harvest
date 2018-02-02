@@ -161,13 +161,11 @@ func (a *API) Post(path string, args Arguments, postData interface{}, target int
 		return errors.Wrapf(err, "HTTP request failure on %s: %s %s", url, string(body), err)
 	}
 
-	// Harvest V1 API returns an empty response, with a Location header including the
-	// URI of the created object (e.g. /projects/254454)
-	redirectDestination := resp.Header.Get("Location")
-	if redirectDestination != "" {
-		return a.Get(redirectDestination, args, target)
-	} else {
-		return errors.Errorf("POST to %s failed to return a Location header. This means we couldn't fetch the new state of the record.", url)
+	decoder := json.NewDecoder(resp.Body)
+	err = decoder.Decode(target)
+	if err != nil {
+		body, _ := ioutil.ReadAll(resp.Body)
+		return errors.Wrapf(err, "JSON decode failed on POST to %s: %s", url, string(body))
 	}
 
 	return nil

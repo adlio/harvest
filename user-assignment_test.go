@@ -36,7 +36,7 @@ func TestGetUserAssignment(t *testing.T) {
 
 func TestCreateUserAssignment(t *testing.T) {
 	a := testAPI()
-	res := mockRedirectResponse("userassignments", "user-assignment-example.json")
+	res := mockResponse("userassignments", "user-assignment-example.json")
 	a.BaseURL = res.URL
 	ta := UserAssignment{UserID: 123456, ProjectID: 12345}
 	err := a.CreateUserAssignment(&ta, Defaults())
@@ -51,7 +51,7 @@ func TestCreateUserAssignment(t *testing.T) {
 
 func TestUpdateUserAssignment(t *testing.T) {
 	a := testAPI()
-	res := mockRedirectResponse("userassignments", "user-assignment-example.json")
+	res := mockResponse("userassignments", "user-assignment-example.json")
 	a.BaseURL = res.URL
 	ta := UserAssignment{UserID: 12456, ProjectID: 12345}
 	err := a.UpdateUserAssignment(&ta, Defaults())

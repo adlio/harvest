@@ -1,6 +1,10 @@
 {
   "id":12670372,
   "client_id":3936632,
+  "client": {
+    "id": 3936632,
+    "name": "Client Name"
+  },
   "name":"TEST",
   "code":"",
   "is_active":true,

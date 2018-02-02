@@ -1,6 +1,10 @@
 {
   "id": 2,
   "client_id": 3954262,
+  "client": {
+    "id": 3954262,
+    "name": "Client Name"
+  },
   "name": "Second Created Project",
   "code": "",
   "active": true,

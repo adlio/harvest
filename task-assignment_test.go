@@ -36,7 +36,7 @@ func TestGetTaskAssignment(t *testing.T) {
 
 func TestCreateTaskAssignment(t *testing.T) {
 	a := testAPI()
-	res := mockRedirectResponse("taskassignments", "task-assignment-example.json")
+	res := mockResponse("taskassignments", "task-assignment-example.json")
 	a.BaseURL = res.URL
 	ta := TaskAssignment{ID: 123456}
 	err := a.CreateTaskAssignment(12345, &ta, Defaults())
@@ -51,7 +51,7 @@ func TestCreateTaskAssignment(t *testing.T) {
 
 func TestUpdateTaskAssignment(t *testing.T) {
 	a := testAPI()
-	res := mockRedirectResponse("taskassignments", "task-assignment-example.json")
+	res := mockResponse("taskassignments", "task-assignment-example.json")
 	a.BaseURL = res.URL
 	ta := TaskAssignment{ID: 12456}
 	err := a.UpdateTaskAssignment(12345, &ta, Defaults())

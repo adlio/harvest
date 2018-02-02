@@ -46,33 +46,31 @@ func mockRedirectResponse(paths ...string) *httptest.Server {
 func mockDynamicPathResponse() *httptest.Server {
 	return httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 
-		if r.Method == "POST" || r.Method == "PUT" {
-			rw.Header().Set("Location", r.URL.Path+"-"+r.Method)
-			rw.Write([]byte{})
-			rw.Write([]byte{})
-		} else {
-			// Build the path for the dynamic content
-			parts := []string{".", "testdata"}
-			parts = append(parts, strings.Split(strings.TrimPrefix(r.URL.Path, "/"), "/")...)
-			// Remove security strings
-			queryStringPart := r.URL.RawQuery
-			if queryStringPart != "" {
-				parts[len(parts)-1] = fmt.Sprintf("%s-%x", parts[len(parts)-1], md5.Sum([]byte(queryStringPart)))
-			}
-			parts[len(parts)-1] = parts[len(parts)-1] + ".json"
-			filename := filepath.Join(parts...)
-
-			if _, err := os.Stat(filename); os.IsNotExist(err) {
-				http.Error(rw, fmt.Sprintf("%s doesn't exist. Create it with the mock you'd like to use.\n Args were: %s", filename, queryStringPart), http.StatusNotFound)
-				return
-			}
-
-			mockData, err := ioutil.ReadFile(filename)
-			if err != nil {
-				log.Fatal(err)
-			}
-			rw.Write(mockData)
+		// Build the path for the dynamic content
+		parts := []string{".", "testdata"}
+		parts = append(parts, strings.Split(strings.TrimPrefix(r.URL.Path, "/"), "/")...)
+		// Remove security strings
+		queryStringPart := r.URL.RawQuery
+		if queryStringPart != "" {
+			parts[len(parts)-1] = fmt.Sprintf("%s-%x", parts[len(parts)-1], md5.Sum([]byte(queryStringPart)))
 		}
+		if r.Method == "GET" {
+			parts[len(parts)-1] = parts[len(parts)-1] + ".json"
+		} else {
+			parts[len(parts)-1] = parts[len(parts)-1] + "-" + r.Method + ".json"
+		}
+		filename := filepath.Join(parts...)
+
+		if _, err := os.Stat(filename); os.IsNotExist(err) {
+			http.Error(rw, fmt.Sprintf("%s doesn't exist. Create it with the mock you'd like to use.\n Args were: %s", filename, queryStringPart), http.StatusNotFound)
+			return
+		}
+
+		mockData, err := ioutil.ReadFile(filename)
+		if err != nil {
+			log.Fatal(err)
+		}
+		rw.Write(mockData)
 
 	}))
 }
