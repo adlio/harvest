@@ -21,7 +21,7 @@ func testProject(t *testing.T) *Project {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if project.Name != "NYRA Web Site Builds x 5" {
+	if project.Name != "Project Names" {
 		t.Errorf("Incorrect Project Name '%s'", project.Name)
 	}
 	if project.ID != 9292184 {
@@ -44,7 +44,7 @@ func TestGetProjects(t *testing.T) {
 	if len(projects) != 4 {
 		t.Errorf("Incorrect number of projects '%v'", len(projects))
 	}
-	if projects[1].Name != "KBL - Vine Website Build" {
+	if projects[1].Name != "Another Project" {
 		t.Errorf("Incorrect Project Name '%s'", projects[1].Name)
 	}
 	if projects[0].ID != 9292184 {
@@ -115,7 +115,7 @@ func TestGetProjectWithStartEndDates(t *testing.T) {
 
 func TestCreateProject(t *testing.T) {
 	a := testAPI()
-	projectResponse := mockRedirectResponse("projects", "12670372.json")
+	projectResponse := mockResponse("projects", "12670372.json")
 	a.BaseURL = projectResponse.URL
 
 	p := Project{
@@ -136,7 +136,7 @@ func TestCreateProject(t *testing.T) {
 
 func TestUpdateProject(t *testing.T) {
 	a := testAPI()
-	projectResponse := mockRedirectResponse("projects", "12670372.json")
+	projectResponse := mockResponse("projects", "12670372.json")
 	a.BaseURL = projectResponse.URL
 
 	p := Project{
