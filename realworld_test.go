@@ -176,7 +176,7 @@ func TestRealWorldGetInvoices(t *testing.T) {
 	}
 
 	if len(messages) < 1 {
-		t.Skipf("Invoice %d had no messages, which might signal a problem, or that it doesn't have any messages.")
+		t.Skipf("Invoice %d had no messages, which might signal a problem, or that it doesn't have any messages.", invoice.ID)
 	}
 
 }
