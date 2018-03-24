@@ -79,3 +79,11 @@ func (a *API) GetTimeEntriesForUserBetween(userID int64, fromDate time.Time, toD
 	args["to"] = to
 	return a.GetTimeEntries(args)
 }
+
+func (a *API) StopTimeEntry(timeEntryId int64) (TimeEntry, error) {
+	args := harvest.Defaults()
+	path := fmt.Sprintf("/time_entries/%d/stop", timeEntryID)
+	entry := TimeEntry{}
+	err := a.Patch("/time_entries", args, timeEntry, &timeEntry)
+	return entry, err
+}
