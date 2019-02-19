@@ -12,10 +12,10 @@ func TestGetEstimate(t *testing.T) {
 		t.Errorf("Incorrect Subject '%s'", estimate.Subject)
 	}
 	if *estimate.Discount != 10.0 {
-		t.Errorf("Expected Discount of 10.0. Got %0.1f", estimate.Discount)
+		t.Errorf("Expected Discount of 10.0. Got %.1f", *estimate.Discount)
 	}
 	if estimate.Amount != 9630.0 {
-		t.Errorf("Expected Amount of 9630.00. Got %0.2f", estimate.Amount)
+		t.Errorf("Expected Amount of 9630.00. Got %.2f", estimate.Amount)
 	}
 }
 
