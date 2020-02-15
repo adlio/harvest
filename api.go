@@ -91,86 +91,18 @@ func (a *API) Get(path string, args Arguments, target interface{}) error {
 }
 
 func (a *API) Put(path string, args Arguments, postData interface{}, target interface{}) error {
-	url := fmt.Sprintf("%s%s", a.BaseURL, path)
-	urlWithParams := fmt.Sprintf("%s?%s", url, args.ToURLValues().Encode())
-
-	buffer := new(bytes.Buffer)
-	if postData != nil {
-		json.NewEncoder(buffer).Encode(postData)
-	}
-
-	req, err := http.NewRequest("PUT", urlWithParams, buffer)
-	if err != nil {
-		return errors.Wrapf(err, "Invalid PUT request %s", url)
-	}
-	a.AddHeaders(req)
-	req.Header.Set("Content-Type", "application/json; charset=utf-8")
-
-	resp, err := a.client.Do(req)
-	if err != nil {
-		return errors.Wrapf(err, "HTTP request failure on %s", url)
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode < 200 || resp.StatusCode > 299 {
-		var body []byte
-		body, err = ioutil.ReadAll(resp.Body)
-		if err != nil {
-			return errors.Wrapf(err, "Error decoding body %s: %s", url, string(body))
-		}
-		return errors.New(fmt.Sprintf("HTTP request failure on %s: %s", url, string(body)))
-	}
-
-	decoder := json.NewDecoder(resp.Body)
-	err = decoder.Decode(target)
-	if err != nil {
-		body, _ := ioutil.ReadAll(resp.Body)
-		return errors.Wrapf(err, "JSON decode failed on POST to %s: %s", url, string(body))
-	}
-
-	return nil
+	return a.PPP("PUT", path, args, postData, target)
 }
 
 func (a *API) Patch(path string, args Arguments, postData interface{}, target interface{}) error {
-	url := fmt.Sprintf("%s%s", a.BaseURL, path)
-	urlWithParams := fmt.Sprintf("%s?%s", url, args.ToURLValues().Encode())
-
-	buffer := new(bytes.Buffer)
-	if postData != nil {
-		json.NewEncoder(buffer).Encode(postData)
-	}
-
-	req, err := http.NewRequest("PATCH", urlWithParams, buffer)
-	if err != nil {
-		return errors.Wrapf(err, "Invalid PATCH request %s", url)
-	}
-	a.AddHeaders(req)
-	req.Header.Set("Content-Type", "application/json; charset=utf-8")
-
-	resp, err := a.client.Do(req)
-	if err != nil {
-		return errors.Wrapf(err, "HTTP request failure on %s", url)
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode < 200 || resp.StatusCode > 299 {
-		var body []byte
-		body, err = ioutil.ReadAll(resp.Body)
-		if err != nil {
-			return errors.Wrapf(err, "Error decoding body %s: %s", url, string(body))
-		}
-		return errors.New(fmt.Sprintf("HTTP request failure on %s: %s", url, string(body)))
-	}
-
-	decoder := json.NewDecoder(resp.Body)
-	err = decoder.Decode(target)
-	if err != nil {
-		body, _ := ioutil.ReadAll(resp.Body)
-		return errors.Wrapf(err, "JSON decode failed on POST to %s: %s", url, string(body))
-	}
-
-	return nil
+	return a.PPP("PATCH", path, args, postData, target)
 }
 
 func (a *API) Post(path string, args Arguments, postData interface{}, target interface{}) error {
+	return a.PPP("POSt", path, args, postData, target)
+}
+
+func (a *API) PPP(method string, path string, args Arguments, postData interface{}, target interface{}) error {
 	url := fmt.Sprintf("%s%s", a.BaseURL, path)
 	urlWithParams := fmt.Sprintf("%s?%s", url, args.ToURLValues().Encode())
 
@@ -179,9 +111,9 @@ func (a *API) Post(path string, args Arguments, postData interface{}, target int
 		json.NewEncoder(buffer).Encode(postData)
 	}
 
-	req, err := http.NewRequest("POST", urlWithParams, buffer)
+	req, err := http.NewRequest(method, urlWithParams, buffer)
 	if err != nil {
-		return errors.Wrapf(err, "Invalid POST request %s", url)
+		return errors.Wrapf(err, "Invalid %s request %s", method, url)
 	}
 	a.AddHeaders(req)
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
