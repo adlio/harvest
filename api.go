@@ -99,7 +99,7 @@ func (a *API) Patch(path string, args Arguments, postData interface{}, target in
 }
 
 func (a *API) Post(path string, args Arguments, postData interface{}, target interface{}) error {
-	return a.PPP("POSt", path, args, postData, target)
+	return a.PPP("POST", path, args, postData, target)
 }
 
 func (a *API) PPP(method string, path string, args Arguments, postData interface{}, target interface{}) error {
