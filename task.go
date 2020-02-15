@@ -19,7 +19,7 @@ type Task struct {
 	ID                int64     `json:"id"`
 	Name              string    `json:"name"`
 	BillableByDefault bool      `json:"billable_by_default"`
-	Deactivated       bool      `json:"deactivated"`
+	IsActive          bool      `json:"is_active"`
 	DefaultHourlyRate float64   `json:"default_hourly_rate"`
 	IsDefault         bool      `json:"is_default"`
 	CreatedAt         time.Time `json:"created_at"`
