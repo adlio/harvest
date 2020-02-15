@@ -44,3 +44,22 @@ func (a *API) GetTasks(args Arguments) (tasks []*Task, err error) {
 	})
 	return tasks, err
 }
+
+func (a *API) CreateTask(t *Task, args Arguments) (task *Task, err error) {
+	task = &Task{}
+	err = a.Post("/tasks", args, t, task)
+	return task, err
+}
+
+func (a *API) UpdateTask(t *Task, args Arguments) (task *Task, err error) {
+	task = &Task{}
+	path := fmt.Sprintf("/tasks/%v", t.ID)
+	err = a.Patch(path, args, t, task)
+	return task, err
+}
+
+func (a *API) DeleteTask(taskID int64, args Arguments) error {
+	path := fmt.Sprintf("/tasks/%v", taskID)
+	err := a.Delete(path, args)
+	return err
+}
