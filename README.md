@@ -1,7 +1,5 @@
-Go Harvest API
+Harvest API / Go SDK
 ==============
-
-[![Harvest Logo](https://www.getharvest.com/assets/press/harvest-logo-capsule-9b74927af1c93319c7d6c47ee89d4c2d442f569492c82899b203dd3bdeaa81a4.png)](https://www.harvestapp.com)
 
 [![GoDoc](https://godoc.org/github.com/sergeykuzmich/harvest?status.svg)](http://godoc.org/github.com/sergeykuzmich/harvest)
 [![Build Status](https://travis-ci.org/sergeykuzmich/harvest.svg)](https://travis-ci.org/sergeykuzmich/harvest)
