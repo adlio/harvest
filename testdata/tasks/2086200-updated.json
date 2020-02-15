@@ -1,0 +1,10 @@
+{
+    "id": 2086200,
+    "name": "New Name",
+    "billable_by_default": false,
+    "created_at": "2013-04-30T20:28:12Z",
+    "updated_at": "2013-08-14T22:25:42Z",
+    "is_default": true,
+    "default_hourly_rate": 0,
+    "deactivated": true
+}

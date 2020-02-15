@@ -1,6 +1,9 @@
 package harvest
 
-import "testing"
+import (
+	"net/http"
+	"testing"
+)
 
 func testTask(t *testing.T) *Task {
 	a := testAPI()
@@ -45,5 +48,61 @@ func TestGetTasks(t *testing.T) {
 	}
 	if tasks[1].ID != 2086200 {
 		t.Errorf("Incorrect Task ID '%v'", tasks[1].ID)
+	}
+}
+
+func TestCreateTask(t *testing.T) {
+	a := testAPI()
+	taskResponse := mockResponse("tasks", "2086200.json")
+	a.BaseURL = taskResponse.URL
+
+	valid_task := Task{
+		Name: "Test",
+	}
+
+	_, err := a.CreateTask(&valid_task, Defaults())
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestCreateInvalidTask(t *testing.T) {
+	a := testAPI()
+	taskResponse := mockErrorResponse(http.StatusUnprocessableEntity)
+	a.BaseURL = taskResponse.URL
+
+	invalid_task := Task{}
+
+	_, err := a.CreateTask(&invalid_task, Defaults())
+	if err == nil {
+		t.Fatal("An error expected")
+	}
+}
+
+func TestUpdateTask(t *testing.T) {
+	a := testAPI()
+	taskResponse := mockResponse("tasks", "2086200-updated.json")
+	a.BaseURL = taskResponse.URL
+
+	input_task := Task{
+		ID:   2086200,
+		Name: "New Name",
+	}
+
+	task, err := a.UpdateTask(&input_task, Defaults())
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if task.Name != input_task.Name {
+		t.Fatal("Task weren't updated")
+	}
+}
+
+func TestDeleteTask(t *testing.T) {
+	a := testAPI()
+	err := a.DeleteTask(2086199, Defaults())
+	if err != nil {
+		t.Fatal(err)
 	}
 }
