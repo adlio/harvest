@@ -23,5 +23,8 @@ _testmain.go
 *.test
 *.prof
 
+# Code Coverage outputs
 coverage.out
+c.out
 coverage.html
+coverage.txt

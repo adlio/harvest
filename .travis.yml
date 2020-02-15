@@ -1,10 +1,18 @@
 language: go
 sudo: false
 go:
-  - 1.13.8
-  - master
+- 1.13.8
+- master
 install:
-  - go get github.com/pkg/errors
-
+- curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+- chmod +x ./cc-test-reporter
+- go get github.com/pkg/errors
+before_script:
+- ./cc-test-reporter before-build
 script:
-  - go test -race
+- go test -coverprofile c.out
+after_script:
+- ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+env:
+  global:
+    secure: OGkkExbR6DJHgCutsKiQYu8ClvMsjVaeiyl6evoIYbuolRzXOifTbo1Acse6Qos1CUnKsWZwES7BF27jDX6XfiVFhmjesNrOxfF47X0aUq+W64ocg93P9/4h/vT2BsBWCrLMTHdB2H9Dw4JANTiU3ni82XX7CbkXahdRkplHRSojvz+9A9ZF2xXv4Sz9SWTy/4+tRJ7JYt77L1bvmMGAoTn/F3HnB06w6V9NfUorLhOEB7yeNGIK3x/c0zDXuFsKApN4qQu9Ii4wm2heL+rt6KJPh4ZhPepZEM/FZwTHsMGFnk/G8focoaPQOnMhRae18c/HGEnMUYMeirkle2QHKNLmj576+bBi1xYa/d1jGtDshyOMW/OGu4dFaaTgkZ0gEaN24vi572NacdetrX4RB8Qq0tha/E0kCDHLcW94MDv+stxCSkR+hetEBXkiMmrxVOz/lHUJDKOs3HjszQzMBdMaWqnWKwwg8KK88Hi2CaoX/S9pVSQvOMvlYcXumxzewn0WAWwWUwNZ2Olo/XiCLn5UcFmDed3e+/qMWSR2+6vYJvGloLOhwyNHWRXlQg2vempeIGytRAge4zMN9WgQBPXoNNyVWO3tHI1nZicZiXG6PAzGXZEL8RwF8mrcGUY64MFkH+XNQdK6vA9weHj3jwqe09fxK1qZf96FMO8zvb4=
