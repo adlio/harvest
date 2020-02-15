@@ -1,17 +1,10 @@
 language: go
 sudo: false
 go:
-  - 1.7
-  - 1.8
-  - 1.9
-  - "1.10"
-  - "1.11.x"
+  - 1.13
   - master
 install:
-- go get github.com/pkg/errors
+  - go get github.com/pkg/errors
 
 script:
-  - go test -race -coverprofile=coverage.txt -covermode=atomic
-
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - go test -race
