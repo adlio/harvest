@@ -192,5 +192,5 @@ func (a *API) log(format string, args ...interface{}) {
 }
 
 func defaultUserAgent() string {
-	return "github.com/sergeykuzmich/harvest v" + CLIENT_VERSION
+	return "github.com/sergeykuzmich/harvest-api-client v" + CLIENT_VERSION
 }

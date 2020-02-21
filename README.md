@@ -1,7 +1,7 @@
 Harvest API Client / Go SDK
 ==============
 
-[![GoDoc](https://godoc.org/github.com/sergeykuzmich/harvest?status.svg)](http://godoc.org/github.com/sergeykuzmich/harvest-api-client)
+[![GoDoc](https://godoc.org/github.com/sergeykuzmich/harvest-api-client?status.svg)](http://godoc.org/github.com/sergeykuzmich/harvest-api-client)
 [![Build Status](https://travis-ci.org/sergeykuzmich/harvest-api-client.svg)](https://travis-ci.org/sergeykuzmich/harvest-api-client)
 [![Code Climate coverage](https://img.shields.io/codeclimate/coverage/sergeykuzmich/harvest-api-client)](https://codeclimate.com/github/sergeykuzmich/harvest-api-client)
 [![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/sergeykuzmich/harvest-api-client)](https://codeclimate.com/github/sergeykuzmich/harvest-api-client)
