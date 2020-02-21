@@ -10,9 +10,9 @@ import (
 	"github.com/pkg/errors"
 )
 
-const CLIENT_VERSION = "1.0"
+const CLIENT_VERSION = "1.1.2"
 const HARVEST_DOMAIN = "api.harvestapp.com"
-const HARVEST_API_VERSION = "v2"
+const HARVEST_API_VERSION = "2"
 
 type API struct {
 	client       *http.Client
@@ -31,7 +31,7 @@ type logger interface {
 func NewTokenAPI(accountID string, accessToken string) *API {
 	a := API{}
 	a.client = http.DefaultClient
-	a.BaseURL = "https://" + HARVEST_DOMAIN + "/" + HARVEST_API_VERSION
+	a.BaseURL = "https://" + HARVEST_DOMAIN + "/v" + HARVEST_API_VERSION
 	a.AccountID = accountID
 	a.AccessToken = accessToken
 	return &a
