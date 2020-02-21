@@ -1,4 +1,4 @@
-package harvest
+package harvest_api_client
 
 import (
 	"testing"

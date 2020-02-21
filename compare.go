@@ -1,4 +1,4 @@
-package harvest
+package harvest_api_client
 
 func HaveSameFloat64Value(a, b *float64) bool {
 	if a == b {
