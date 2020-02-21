@@ -12,7 +12,7 @@ import (
 
 const CLIENT_VERSION = "1.1.2"
 const HARVEST_DOMAIN = "api.harvestapp.com"
-const HARVEST_API_VERSION = "2"
+const HARVEST_API_VERSION = "v2"
 
 type API struct {
 	client       *http.Client
@@ -28,10 +28,10 @@ type logger interface {
 	Debugf(string, ...interface{})
 }
 
-func NewTokenAPI(accountID string, accessToken string) *API {
+func HarvestClient(accountID string, accessToken string) *API {
 	a := API{}
 	a.client = http.DefaultClient
-	a.BaseURL = "https://" + HARVEST_DOMAIN + "/v" + HARVEST_API_VERSION
+	a.BaseURL = "https://" + HARVEST_DOMAIN + "/" + HARVEST_API_VERSION
 	a.AccountID = accountID
 	a.AccessToken = accessToken
 	return &a
@@ -192,5 +192,5 @@ func (a *API) log(format string, args ...interface{}) {
 }
 
 func defaultUserAgent() string {
-	return "github.com/adlio/harvest v" + CLIENT_VERSION
+	return "github.com/sergeykuzmich/harvest v" + CLIENT_VERSION
 }
