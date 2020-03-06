@@ -1,4 +1,4 @@
-package harvest
+package harvest_api_client
 
 import (
 	"os"
@@ -296,7 +296,7 @@ func realWorldTestAPI(t *testing.T) *API {
 	token := os.Getenv("HARVEST_TOKEN")
 
 	if realworld == "true" && account != "" && token != "" {
-		return NewTokenAPI(account, token)
+		return HarvestClient(account, token)
 	} else {
 		t.Skipf("Skipping realworld tests because HARVEST_REALWORLD != true or HARVEST_ACCOUNT_ID / HARVEST_TOKEN not supplied as environment variables.")
 		return nil

@@ -1,11 +1,11 @@
-package harvest
+package harvest_api_client
 
 import (
 	"testing"
 )
 
-func TestNewTokenAPI(t *testing.T) {
-	a1 := NewTokenAPI("ACCOUNTID", "TOKEN")
+func TestHarvestClient(t *testing.T) {
+	a1 := HarvestClient("ACCOUNTID", "TOKEN")
 	if a1.BaseURL != "https://api.harvestapp.com/v2" {
 		t.Errorf("Incorrect domain name '%s'.", a1.BaseURL)
 	}
@@ -21,6 +21,6 @@ func TestNewTokenAPI(t *testing.T) {
 }
 
 func testAPI() *API {
-	a := NewTokenAPI("ACCOUNTID", "TOKEN")
+	a := HarvestClient("ACCOUNTID", "TOKEN")
 	return a
 }

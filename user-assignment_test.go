@@ -1,4 +1,4 @@
-package harvest
+package harvest_api_client
 
 import "testing"
 
@@ -66,6 +66,8 @@ func TestUpdateUserAssignment(t *testing.T) {
 
 func TestDeleteUserAssignment(t *testing.T) {
 	a := testAPI()
+	res := mockResponse("userassignments", "user-assignment-DELETE.json")
+	a.BaseURL = res.URL
 	err := a.DeleteUserAssignment(&UserAssignment{ID: 123456, ProjectID: 12345}, Defaults())
 	if err != nil {
 		t.Fatal(err)

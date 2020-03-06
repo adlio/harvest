@@ -1,4 +1,4 @@
-package harvest
+package harvest_api_client
 
 import (
 	"bytes"
@@ -10,25 +10,19 @@ import (
 	"github.com/pkg/errors"
 )
 
-const CLIENT_VERSION = "1.0"
+const CLIENT_VERSION = "1.1.2"
 const HARVEST_DOMAIN = "api.harvestapp.com"
 const HARVEST_API_VERSION = "v2"
 
 type API struct {
 	client       *http.Client
-	Logger       logger
 	BaseURL      string
 	AccountID    string
 	AccessToken  string
 	RefreshToken string
-	UserAgent    string
 }
 
-type logger interface {
-	Debugf(string, ...interface{})
-}
-
-func NewTokenAPI(accountID string, accessToken string) *API {
+func HarvestClient(accountID string, accessToken string) *API {
 	a := API{}
 	a.client = http.DefaultClient
 	a.BaseURL = "https://" + HARVEST_DOMAIN + "/" + HARVEST_API_VERSION
@@ -69,21 +63,24 @@ func (a *API) Get(path string, args Arguments, target interface{}) error {
 	}
 	a.AddHeaders(req)
 
-	resp, err := a.client.Do(req)
+	res, err := a.client.Do(req)
 	if err != nil {
 		return errors.Wrapf(err, "HTTP request failure on %s", url)
 	}
-	defer resp.Body.Close()
-	if resp.StatusCode != 200 {
+	defer res.Body.Close()
+	if res.StatusCode != 200 {
 		var body []byte
-		body, err = ioutil.ReadAll(resp.Body)
-		return errors.Errorf("HTTP request failure on %s: %s %s", url, string(body), err)
+		body, err = ioutil.ReadAll(res.Body)
+		if err != nil {
+			return errors.Wrapf(err, "HTTP request failure on %s: %s %s", url, string(body), err)
+		}
+		return errors.Errorf("HTTP request failure on %s: %s", url, string(body))
 	}
 
-	decoder := json.NewDecoder(resp.Body)
+	decoder := json.NewDecoder(res.Body)
 	err = decoder.Decode(target)
 	if err != nil {
-		body, _ := ioutil.ReadAll(resp.Body)
+		body, _ := ioutil.ReadAll(res.Body)
 		return errors.Wrapf(err, "JSON decode failed on %s: %s", url, string(body))
 	}
 
@@ -118,24 +115,24 @@ func (a *API) PPP(method string, path string, args Arguments, postData interface
 	a.AddHeaders(req)
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 
-	resp, err := a.client.Do(req)
+	res, err := a.client.Do(req)
 	if err != nil {
 		return errors.Wrapf(err, "HTTP request failure on %s", url)
 	}
-	defer resp.Body.Close()
-	if resp.StatusCode < 200 || resp.StatusCode > 299 {
+	defer res.Body.Close()
+	if res.StatusCode < 200 || res.StatusCode > 299 {
 		var body []byte
-		body, err = ioutil.ReadAll(resp.Body)
+		body, err = ioutil.ReadAll(res.Body)
 		if err != nil {
-			return errors.Wrapf(err, "Error decoding body %s: %s", url, string(body))
+			return errors.Wrapf(err, "HTTP request failure on %s: %s %s", url, string(body), err)
 		}
-		return errors.New(fmt.Sprintf("HTTP request failure on %s: %s", url, string(body)))
+		return errors.Errorf("HTTP request failure on %s: %s", url, string(body))
 	}
 
-	decoder := json.NewDecoder(resp.Body)
+	decoder := json.NewDecoder(res.Body)
 	err = decoder.Decode(target)
 	if err != nil {
-		body, _ := ioutil.ReadAll(resp.Body)
+		body, _ := ioutil.ReadAll(res.Body)
 		return errors.Wrapf(err, "JSON decode failed on POST to %s: %s", url, string(body))
 	}
 
@@ -152,45 +149,27 @@ func (a *API) Delete(path string, args Arguments) error {
 	}
 	a.AddHeaders(req)
 
-	resp, err := a.client.Do(req)
+	res, err := a.client.Do(req)
 	if err != nil {
 		return errors.Wrapf(err, "HTTP request failure on %s", url)
 	}
-	defer resp.Body.Close()
-	if resp.StatusCode != 200 {
+	defer res.Body.Close()
+	if res.StatusCode != 200 {
 		var body []byte
-		body, err = ioutil.ReadAll(resp.Body)
-		return errors.Wrapf(err, "HTTP request failure on %s: %s %s", url, string(body), err)
+		body, err = ioutil.ReadAll(res.Body)
+		if err != nil {
+			return errors.Wrapf(err, "HTTP request failure on %s: %s %s", url, string(body), err)
+		}
+		return errors.Errorf("HTTP request failure on %s: %s", url, string(body))
 	}
 
 	return nil
 }
 
-// Applies relevant User-Agent, Accept, Authorization headers
+// Applies relevant User-Agent, Accept & Authorization
 func (a *API) AddHeaders(req *http.Request) {
 	req.Header.Set("Accept", "application/json")
-
-	if a.UserAgent != "" {
-		req.Header.Set("User-Agent", a.UserAgent)
-	} else {
-		req.Header.Set("User-Agent", defaultUserAgent())
-	}
-
-	if a.AccountID != "" {
-		req.Header.Set("Harvest-Account-Id", a.AccountID)
-	}
-
-	if a.AccessToken != "" {
-		req.Header.Set("Authorization", "Bearer "+a.AccessToken)
-	}
-}
-
-func (a *API) log(format string, args ...interface{}) {
-	if a.Logger != nil {
-		a.Logger.Debugf(format, args)
-	}
-}
-
-func defaultUserAgent() string {
-	return "github.com/adlio/harvest v" + CLIENT_VERSION
+	req.Header.Set("User-Agent", "github.com/sergeykuzmich/harvest-api-client v"+CLIENT_VERSION)
+	req.Header.Set("Harvest-Account-Id", a.AccountID)
+	req.Header.Set("Authorization", "Bearer "+a.AccessToken)
 }
