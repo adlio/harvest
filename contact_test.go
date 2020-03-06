@@ -1,6 +1,10 @@
 package harvest_api_client
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/pkg/errors"
+)
 
 func testContact(t *testing.T) *Contact {
 	a := testAPI()
@@ -21,6 +25,19 @@ func TestGetContact(t *testing.T) {
 	if contact.ID != 2937808 {
 		t.Errorf("Incorrect contact ID '%v'", contact.ID)
 	}
+}
+
+func TestGetNonExistingContact(t *testing.T) {
+	a := testAPI()
+	contactResponse := mockNotFoundResponse()
+	a.BaseURL = contactResponse.URL
+	_, err := a.GetContact(1, Defaults())
+
+	expectedError := errors.Errorf("HTTP request failure on %s/contacts/1: %s", contactResponse.URL, string("{}\n"))
+
+  if err.Error() != expectedError.Error() {
+  	t.Fatal(err)
+  }
 }
 
 func TestGetClientContacts(t *testing.T) {
