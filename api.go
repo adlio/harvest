@@ -16,16 +16,10 @@ const HARVEST_API_VERSION = "v2"
 
 type API struct {
 	client       *http.Client
-	Logger       logger
 	BaseURL      string
 	AccountID    string
 	AccessToken  string
 	RefreshToken string
-	UserAgent    string
-}
-
-type logger interface {
-	Debugf(string, ...interface{})
 }
 
 func HarvestClient(accountID string, accessToken string) *API {
@@ -166,31 +160,10 @@ func (a *API) Delete(path string, args Arguments) error {
 	return nil
 }
 
-// Applies relevant User-Agent, Accept, Authorization headers
+// Applies relevant User-Agent, Accept & Authorization
 func (a *API) AddHeaders(req *http.Request) {
 	req.Header.Set("Accept", "application/json")
-
-	if a.UserAgent != "" {
-		req.Header.Set("User-Agent", a.UserAgent)
-	} else {
-		req.Header.Set("User-Agent", defaultUserAgent())
-	}
-
-	if a.AccountID != "" {
-		req.Header.Set("Harvest-Account-Id", a.AccountID)
-	}
-
-	if a.AccessToken != "" {
-		req.Header.Set("Authorization", "Bearer "+a.AccessToken)
-	}
-}
-
-func (a *API) log(format string, args ...interface{}) {
-	if a.Logger != nil {
-		a.Logger.Debugf(format, args)
-	}
-}
-
-func defaultUserAgent() string {
-	return "github.com/sergeykuzmich/harvest-api-client v" + CLIENT_VERSION
+	req.Header.Set("User-Agent", "github.com/sergeykuzmich/harvest-api-client v"+CLIENT_VERSION)
+	req.Header.Set("Harvest-Account-Id", a.AccountID)
+	req.Header.Set("Authorization", "Bearer "+a.AccessToken)
 }
