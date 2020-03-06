@@ -173,6 +173,8 @@ func TestDuplicateProject(t *testing.T) {
 
 func TestDeleteProject(t *testing.T) {
 	a := testAPI()
+	projectResponse := mockResponse("projects", "12670372-DELETE.json")
+	a.BaseURL = projectResponse.URL
 	err := a.DeleteProject(&Project{ID: 1}, Defaults())
 	if err != nil {
 		t.Fatal(err)

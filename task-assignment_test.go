@@ -66,6 +66,8 @@ func TestUpdateTaskAssignment(t *testing.T) {
 
 func TestDeleteTaskAssignment(t *testing.T) {
 	a := testAPI()
+	res := mockResponse("taskassignments", "task-assignment-DELETE.json")
+	a.BaseURL = res.URL
 	err := a.DeleteTaskAssignment(12345, &TaskAssignment{ID: 123456}, Defaults())
 	if err != nil {
 		t.Fatal(err)

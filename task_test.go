@@ -101,6 +101,8 @@ func TestUpdateTask(t *testing.T) {
 
 func TestDeleteTask(t *testing.T) {
 	a := testAPI()
+	taskResponse := mockResponse("tasks", "2086200-DELETE.json")
+	a.BaseURL = taskResponse.URL
 	err := a.DeleteTask(2086199, Defaults())
 	if err != nil {
 		t.Fatal(err)

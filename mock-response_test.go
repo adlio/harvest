@@ -25,6 +25,21 @@ func mockResponse(paths ...string) *httptest.Server {
 	}))
 }
 
+func mockNotFoundResponse() *httptest.Server {
+	parts := []string{".", "testdata"}
+	filename := filepath.Join(append(parts, "404.json")...)
+
+	mockData, err := ioutil.ReadFile(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+		rw.WriteHeader(http.StatusNotFound)
+		rw.Write(mockData)
+	}))
+}
+
 func mockRedirectResponse(paths ...string) *httptest.Server {
 	parts := []string{".", "testdata"}
 	filename := filepath.Join(append(parts, paths...)...)
