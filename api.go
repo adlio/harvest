@@ -114,7 +114,7 @@ func (a *API) Put(path string, args Arguments, postData interface{}, target inte
 	if resp.StatusCode < 200 || resp.StatusCode > 299 {
 		var body []byte
 		body, err = ioutil.ReadAll(resp.Body)
-		return errors.Wrapf(err, "HTTP request failure on %s: %s %s", url, string(body), err)
+		return fmt.Errorf("HTTP request failure on %s: %d %s", url, resp.StatusCode, body)
 	}
 
 	// Harvest V1 API returns an empty response, with a Location header including the
